@@ -94,3 +94,5 @@ vetcareProject/
   ```bash
   python manage.py startapp
   ```
+    <!-- href="{% url 'agendamiento:home' %}" -->
+  ![alt text](image.png)
