@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from vetApp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('vetApp/', include('vetApp.urls')),
-    
+    path('gestion/', views.citas , name= 'gestion.urls'),
 ]

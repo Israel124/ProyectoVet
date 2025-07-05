@@ -8,3 +8,8 @@ def home(request):
   
   return render(request, 'Home/home.html', contexto)
 
+def citas(request):
+  
+    contexto = {}
+    
+    return render(request, 'Home/GestionCitas.html', contexto)
