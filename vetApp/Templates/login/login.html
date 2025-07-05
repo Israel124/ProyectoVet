@@ -1,328 +1,84 @@
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VetCare - Iniciar Sesión / Registro</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      .tab-active {
-        color: #0d6efd;
-        border-bottom: 2px solid #0d6efd;
-      }
-      .error-message {
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-      .show-error {
-        opacity: 1;
-      }
-      .success-message {
-        transform: translateY(-20px);
-        transition: all 0.4s ease;
-      }
-      .show-success {
-        transform: translateY(0);
-      }
-    </style>
-  </head>
-  <body
-    class="bg-light d-flex align-items-center justify-content-center min-vh-100"
-  >
-    <div class="card shadow-lg" style="width: 100%; max-width: 500px">
-      <div
-        class="card-header bg-white border-bottom d-flex justify-content-around"
-      >
-        <button id="login-tab" class="btn btn-link tab-active">
-          Iniciar Sesión
-        </button>
-        <button id="register-tab" class="btn btn-link text-muted">
-          Registrarse
-        </button>
-      </div>
-      <div class="card-body">
-        <!-- Login Form -->
-        <div id="login-form">
-          <div id="login-success" class="alert alert-success d-none">
-            ¡Inicio de sesión exitoso! Redirigiendo...
+{% extends 'shared/base.html' %} {% block title %}Iniciar Sesión
+{%endblock %} {% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body p-5">
+          <h2 class="text-center mb-4">Iniciar Sesión</h2>
+
+          {% if messages %}
+          <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
           </div>
-          <div class="mb-3">
-            <label for="login-email" class="form-label"
-              >Correo Electrónico</label
-            >
-            <input
-              type="email"
-              class="form-control"
-              id="login-email"
-              placeholder="tu@email.com"
-            />
-            <div
-              id="login-email-error"
-              class="form-text text-danger error-message"
-            ></div>
-          </div>
-          <div class="mb-3">
-            <label for="login-password" class="form-label">Contraseña</label>
-            <input
-              type="password"
-              class="form-control"
-              id="login-password"
-              placeholder="••••••••"
-            />
-            <div
-              id="login-password-error"
-              class="form-text text-danger error-message"
-            ></div>
-            <div class="text-end mt-1">
-              <a href="#" class="small text-primary"
-                >¿Olvidaste tu contraseña?</a
+          {% endif %}
+
+          <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="{{ form.username.id_for_label }}" class="form-label"
+                >{{ form.username.label }}</label
               >
+              {{ form.username }}
+              <div class="invalid-feedback">
+                Por favor ingrese su nombre de usuario.
+              </div>
             </div>
-          </div>
-          <button id="login-btn" class="btn btn-primary w-100">
-            Iniciar Sesión
-          </button>
-          <div class="mt-3 text-center">
-            <span
-              >¿No tienes cuenta?
-              <button id="show-register" class="btn btn-link p-0">
-                Regístrate
-              </button></span
-            >
+
+            <div class="mb-4">
+              <label for="{{ form.password.id_for_label }}" class="form-label"
+                >{{ form.password.label }}</label
+              >
+              {{ form.password }}
+              <div class="invalid-feedback">
+                Por favor ingrese su contraseña.
+              </div>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-lg">
+                Iniciar Sesión
+              </button>
+            </div>
+          </form>
+
+          <div class="text-center mt-4">
+            <p>
+              ¿No tienes una cuenta?
+              <a
+                href="{% url 'register' %}"
+                class="text-decoration-none"
+                >Regístrate aquí</a
+              >
+            </p>
           </div>
         </div>
-        <!-- Register Form -->
-        <div id="register-form" class="d-none">
-          <div id="register-success" class="alert alert-success d-none">
-            ¡Registro exitoso! Por favor revisa tu correo.
-          </div>
-          <div class="mb-3">
-            <label for="register-name" class="form-label"
-              >Nombre Completo</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="register-name"
-              placeholder="Tu nombre"
-            />
-            <div
-              id="register-name-error"
-              class="form-text text-danger error-message"
-            ></div>
-          </div>
-          <div class="mb-3">
-            <label for="register-email" class="form-label"
-              >Correo Electrónico</label
-            >
-            <input
-              type="email"
-              class="form-control"
-              id="register-email"
-              placeholder="tu@email.com"
-            />
-            <div
-              id="register-email-error"
-              class="form-text text-danger error-message"
-            ></div>
-          </div>
-          <div class="mb-3">
-            <label for="register-password" class="form-label">Contraseña</label>
-            <input
-              type="password"
-              class="form-control"
-              id="register-password"
-              placeholder="••••••••"
-            />
-            <div
-              id="register-password-error"
-              class="form-text text-danger error-message"
-            >
-              <small class="text-muted"
-                >Mínimo 8 caracteres, 1 mayúscula, 1 número</small
-              >
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="register-confirm" class="form-label"
-              >Confirmar Contraseña</label
-            >
-            <input
-              type="password"
-              class="form-control"
-              id="register-confirm"
-              placeholder="••••••••"
-            />
-            <div
-              id="register-confirm-error"
-              class="form-text text-danger error-message"
-            ></div>
-          </div>
-          <button id="register-btn" class="btn btn-primary w-100">
-            Registrarse
-          </button>
-          <div class="mt-3 text-center">
-            <span
-              >¿Ya tienes cuenta?
-              <button id="show-login" class="btn btn-link p-0">
-                Inicia Sesión
-              </button></span
-            >
-          </div>
-        </div>
-      </div>
-      <div class="card-footer bg-primary text-white text-center">
-        <h5 class="mb-0">VetCare</h5>
-        <small>Bienvenido al sistema de atención veterinaria</small>
       </div>
     </div>
+  </div>
+</div>
 
-    <script>
-      const loginTab = document.getElementById("login-tab");
-      const registerTab = document.getElementById("register-tab");
-      const loginForm = document.getElementById("login-form");
-      const registerForm = document.getElementById("register-form");
-      const showLogin = document.getElementById("show-login");
-      const showRegister = document.getElementById("show-register");
-
-      function switchForm(formToShow, tabToActivate) {
-        loginForm.classList.add("d-none");
-        registerForm.classList.add("d-none");
-        formToShow.classList.remove("d-none");
-
-        loginTab.classList.remove("tab-active");
-        registerTab.classList.remove("tab-active");
-        loginTab.classList.add("text-muted");
-        registerTab.classList.add("text-muted");
-        tabToActivate.classList.add("tab-active");
-        tabToActivate.classList.remove("text-muted");
-      }
-
-      loginTab.addEventListener("click", () => switchForm(loginForm, loginTab));
-      registerTab.addEventListener("click", () =>
-        switchForm(registerForm, registerTab)
+<script>
+  // Validación de formulario Bootstrap
+  (function () {
+    "use strict";
+    var forms = document.querySelectorAll(".needs-validation");
+    Array.prototype.slice.call(forms).forEach(function (form) {
+      form.addEventListener(
+        "submit",
+        function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add("was-validated");
+        },
+        false
       );
-      showLogin.addEventListener("click", () =>
-        switchForm(loginForm, loginTab)
-      );
-      showRegister.addEventListener("click", () =>
-        switchForm(registerForm, registerTab)
-      );
-
-      // Login validation
-      document.getElementById("login-btn").addEventListener("click", () => {
-        const email = document.getElementById("login-email").value;
-        const password = document.getElementById("login-password").value;
-        let valid = true;
-
-        document.getElementById("login-email-error").textContent = "";
-        document.getElementById("login-password-error").textContent = "";
-
-        if (!email) {
-          document.getElementById("login-email-error").textContent =
-            "Correo requerido";
-          document
-            .getElementById("login-email-error")
-            .classList.add("show-error");
-          valid = false;
-        } else if (!/^\S+@\S+\.\S+$/.test(email)) {
-          document.getElementById("login-email-error").textContent =
-            "Correo inválido";
-          document
-            .getElementById("login-email-error")
-            .classList.add("show-error");
-          valid = false;
-        }
-
-        if (!password) {
-          document.getElementById("login-password-error").textContent =
-            "Contraseña requerida";
-          document
-            .getElementById("login-password-error")
-            .classList.add("show-error");
-          valid = false;
-        } else if (password.length < 6) {
-          document.getElementById("login-password-error").textContent =
-            "Mínimo 6 caracteres";
-          document
-            .getElementById("login-password-error")
-            .classList.add("show-error");
-          valid = false;
-        }
-
-        if (valid) {
-          document.getElementById("login-success").classList.remove("d-none");
-          document
-            .getElementById("login-success")
-            .classList.add("show-success");
-          setTimeout(() => console.log({ email, password }), 1500);
-        }
-      });
-
-      // Register validation
-      document.getElementById("register-btn").addEventListener("click", () => {
-        const name = document.getElementById("register-name").value;
-        const email = document.getElementById("register-email").value;
-        const password = document.getElementById("register-password").value;
-        const confirm = document.getElementById("register-confirm").value;
-        let valid = true;
-
-        document.getElementById("register-name-error").textContent = "";
-        document.getElementById("register-email-error").textContent = "";
-        document.getElementById("register-password-error").textContent = "";
-        document.getElementById("register-confirm-error").textContent = "";
-
-        if (!name) {
-          document.getElementById("register-name-error").textContent =
-            "Nombre requerido";
-          document
-            .getElementById("register-name-error")
-            .classList.add("show-error");
-          valid = false;
-        }
-        if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-          document.getElementById("register-email-error").textContent =
-            "Correo inválido";
-          document
-            .getElementById("register-email-error")
-            .classList.add("show-error");
-          valid = false;
-        }
-        if (
-          !password ||
-          password.length < 8 ||
-          !/[A-Z]/.test(password) ||
-          !/[0-9]/.test(password)
-        ) {
-          document.getElementById("register-password-error").textContent =
-            "La contraseña debe tener al menos 8 caracteres, una mayúscula y un número";
-          document
-            .getElementById("register-password-error")
-            .classList.add("show-error");
-          valid = false;
-        }
-        if (password !== confirm) {
-          document.getElementById("register-confirm-error").textContent =
-            "Las contraseñas no coinciden";
-          document
-            .getElementById("register-confirm-error")
-            .classList.add("show-error");
-          valid = false;
-        }
-
-        if (valid) {
-          document
-            .getElementById("register-success")
-            .classList.remove("d-none");
-          document
-            .getElementById("register-success")
-            .classList.add("show-success");
-          setTimeout(() => console.log({ name, email, password }), 1500);
-        }
-      });
-    </script>
-  </body>
-</html>
+    });
+  })();
+</script>
+{% endblock %}
