@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Veterinaria MiMascota</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Veterinaria MiMascota</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Inventario</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="#">Productos</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Clientes</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+      class="position-relative text-white py-5"
+      style="
+        min-height: 100vh;
+        background: linear-gradient(to right, #3b82f6, #6366f1);
+      "
+    >
+      <div
+        class="position-absolute top-0 start-0 w-100 h-100"
+        style="
+          background-image: url('https://placehold.co/1920x1080/4F46E5/FFFFFF?text=Animales+Felices');
+          background-size: cover;
+          background-position: center;
+          opacity: 0.3;
+          z-index: 0;
+        "
+      ></div>
+      <div class="container position-relative z-1 text-center">
+        <p class="fs-4 mb-4">
+          Tu mejor amigo merece la mejor atención. En Veterinaria PetCare, su
+          salud y felicidad son nuestra prioridad.
+        </p>
+        <a href="#services" class="btn btn-light btn-lg fw-bold px-4 py-2">
+          Explora Nuestros Servicios
+        </a>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-5 bg-white">
+      <div class="container text-center">
+        <h2 class="display-5 text-primary fw-bold mb-4">
+          Nuestros Servicios Integrales
+        </h2>
+        <div class="row g-4">
+          <!-- Reutilizable Card -->
+          <div class="col-md-4">
+            <div class="card border border-primary h-100">
+              <div class="card-body text-center">
+                <img
+                  src="https://placehold.co/100x100/A5B4FC/FFFFFF?text=Veterinaria"
+                  class="rounded-circle border border-primary mb-3"
+                  alt="Consulta Veterinaria"
+                />
+                <h5 class="card-title text-primary">Consultas Generales</h5>
+                <p class="card-text">
+                  Exámenes de rutina, diagnósticos y atención preventiva para
+                  mantener a tu mascota sana y feliz.
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Vacunación -->
+          <div class="col-md-4">
+            <div class="card border border-success h-100">
+              <div class="card-body text-center">
+                <img
+                  src="https://placehold.co/100x100/A7F3D0/FFFFFF?text=Vacunas"
+                  class="rounded-circle border border-success mb-3"
+                  alt="Vacunación"
+                />
+                <h5 class="card-title text-success">
+                  Vacunación y Desparasitación
+                </h5>
+                <p class="card-text">
+                  Programas personalizados de vacunación y control de parásitos
+                  internos y externos.
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Cirugía -->
+          <div class="col-md-4">
+            <div class="card border border-secondary h-100">
+              <div class="card-body text-center">
+                <img
+                  src="https://placehold.co/100x100/DDD6FE/FFFFFF?text=Cirugía"
+                  class="rounded-circle border border-secondary mb-3"
+                  alt="Cirugía"
+                />
+                <h5 class="card-title text-secondary">
+                  Cirugía y Hospitalización
+                </h5>
+                <p class="card-text">
+                  Instalaciones modernas para procedimientos quirúrgicos y
+                  cuidados post-operatorios.
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Estética -->
+          <div class="col-md-4">
+            <div class="card border border-warning h-100">
+              <div class="card-body text-center">
+                <img
+                  src="https://placehold.co/100x100/FDE68A/FFFFFF?text=Estética"
+                  class="rounded-circle border border-warning mb-3"
+                  alt="Estética"
+                />
+                <h5 class="card-title text-warning">Estética y Peluquería</h5>
+                <p class="card-text">
+                  Baño, corte de pelo y tratamientos de belleza para consentir a
+                  tu mascota.
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Urgencias -->
+          <div class="col-md-4">
+            <div class="card border border-danger h-100">
+              <div class="card-body text-center">
+                <img
+                  src="https://placehold.co/100x100/FECACA/FFFFFF?text=Urgencias"
+                  class="rounded-circle border border-danger mb-3"
+                  alt="Urgencias"
+                />
+                <h5 class="card-title text-danger">Urgencias 24/7</h5>
+                <p class="card-text">
+                  Atención veterinaria de emergencia las 24 horas del día, todos
+                  los días.
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Laboratorio -->
+          <div class="col-md-4">
+            <div class="card border border-info h-100">
+              <div class="card-body text-center">
+                <img
+                  src="https://placehold.co/100x100/99F6E4/FFFFFF?text=Laboratorio"
+                  class="rounded-circle border border-info mb-3"
+                  alt="Laboratorio"
+                />
+                <h5 class="card-title text-info">Laboratorio y Diagnóstico</h5>
+                <p class="card-text">
+                  Análisis clínicos avanzados para diagnósticos precisos y
+                  oportunos.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Us -->
+    <section class="py-5 bg-light" id="about">
+      <div
+        class="container d-flex flex-column flex-md-row align-items-center gap-4"
+      >
+        <div class="col-md-6">
+          <img
+            src="https://placehold.co/600x400/818CF8/FFFFFF?text=Veterinarios+Profesionales"
+            class="img-fluid rounded shadow border border-primary"
+            alt="Nuestro Equipo Veterinario"
+          />
+        </div>
+        <div class="col-md-6">
+          <h2 class="text-primary fw-bold mb-3">Sobre Nosotros</h2>
+          <p class="mb-3">
+            Contamos con un equipo profesional apasionado, dedicado al cuidado
+            integral de tus mascotas. Nuestras instalaciones modernas aseguran
+            diagnósticos precisos y tratamientos eficaces.
+          </p>
+          <p>
+            Promovemos la medicina preventiva y la educación de los dueños para
+            mejorar la calidad de vida de cada mascota.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section
+      class="py-5 text-white"
+      style="background: linear-gradient(to right, #2563eb, #4f46e5)"
+      id="contact"
+    >
+      <div class="container text-center">
+        <h2 class="mb-4 fw-bold">Contáctanos Hoy Mismo</h2>
+        <p class="fs-5 mb-4">
+          ¿Listo para agendar una cita o tienes preguntas? ¡Estamos aquí para
+          ayudarte!
+        </p>
+        <div
+          class="bg-white text-dark p-4 rounded shadow d-inline-block text-start"
+        >
+          <p class="h5 fw-bold mb-2">¡Llámanos!</p>
+          <p class="fs-4 mb-3">
+            <a href="tel:+50512345678" class="text-decoration-none text-primary"
+              >+505 1234 5678</a
+            >
+          </p>
+          <p class="fw-bold mb-1">O visítanos:</p>
+          <p class="mb-1">123 Calle de los Animales Felices</p>
+          <p class="mb-1">Managua, Nicaragua</p>
+          <p class="mt-2">Horario: Lun-Vie 9 AM - 6 PM | Sáb 9 AM - 1 PM</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center text-muted py-3 mt-4">
+      <small
+        >© 2025 Veterinaria MiMascota - Todos los derechos reservados</small
+      >
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
