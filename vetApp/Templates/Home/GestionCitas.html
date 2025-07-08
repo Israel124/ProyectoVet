@@ -41,6 +41,7 @@
         .pet-img-container {
             height: 180px;
             overflow: hidden;
+            position: relative;
         }
         
         .pet-img {
@@ -48,6 +49,38 @@
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s;
+        }
+        
+        .pet-img-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            color: white;
+            padding: 10px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .pet-img-container:hover .pet-img-overlay {
+            transform: translateY(0);
+        }
+        
+        .pet-type-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--vet-primary);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         
         .vet-card:hover .pet-img {
@@ -117,6 +150,60 @@
         .btn-edit {
             background-color: #4285f4;
             color: white;
+        }
+        
+        /* Imágenes predeterminadas para animales */
+        .default-dog-img {
+            background: linear-gradient(135deg, #6a93cb 0%, #a4bfef 100%);
+        }
+        
+        .default-cat-img {
+            background: linear-gradient(135deg, #d4a5a5 0%, #f8d7da 100%);
+        }
+        
+        .default-bird-img {
+            background: linear-gradient(135deg, #80cbc4 0%, #b2dfdb 100%);
+        }
+        
+        .default-other-img {
+            background: linear-gradient(135deg, #a5d6a7 0%, #c8e6c9 100%);
+        }
+        
+        .default-img-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        .default-img-icon {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+        
+        /* Responsividad para móviles */
+        @media (max-width: 768px) {
+            .pet-img-container {
+                height: 150px;
+            }
+            
+            .pet-type-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--vet-primary);
+            color: var(--vet-primary);
         }
     </style>
 </head>
@@ -222,45 +309,73 @@
                     </div>
                 </div>
 
-                <!-- Formulario CRUD -->
+                <!-- Formulario CRUD con campos del dueño -->
                 <div class="form-section">
                     <h5 class="mb-3"><i class="fas fa-plus-circle me-1"></i> Agregar/Editar Cita</h5>
                     <form id="appointmentForm">
                         <input type="hidden" id="appointmentId">
-                        <div class="mb-3">
-                            <label for="petName" class="form-label">Nombre de la mascota</label>
-                            <input type="text" class="form-control" id="petName" required>
+                        
+                        <!-- Información de la mascota -->
+                        <div class="mb-4">
+                            <h6 class="section-title"><i class="fas fa-paw me-2"></i> Información de la Mascota</h6>
+                            <div class="mb-3">
+                                <label for="petName" class="form-label">Nombre de la mascota</label>
+                                <input type="text" class="form-control" id="petName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="animalType" class="form-label">Tipo de animal</label>
+                                <select class="form-select" id="animalType" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="dog">Perro</option>
+                                    <option value="cat">Gato</option>
+                                    <option value="bird">Ave</option>
+                                    <option value="other">Otro</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="breed" class="form-label">Raza</label>
+                                <input type="text" class="form-control" id="breed" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="age" class="form-label">Edad (años)</label>
+                                <input type="number" class="form-control" id="age" min="0" max="30" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="animalType" class="form-label">Tipo de animal</label>
-                            <select class="form-select" id="animalType" required>
-                                <option value="">Seleccionar...</option>
-                                <option value="dog">Perro</option>
-                                <option value="cat">Gato</option>
-                                <option value="bird">Ave</option>
-                                <option value="other">Otro</option>
-                            </select>
+                        
+                        <!-- Información del dueño (mantenida pero no visible en tarjetas) -->
+                        <div class="mb-4">
+                            <h6 class="section-title"><i class="fas fa-user me-2"></i> Información del Dueño</h6>
+                            <div class="mb-3">
+                                <label for="ownerName" class="form-label">Nombre del dueño</label>
+                                <input type="text" class="form-control" id="ownerName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Teléfono</label>
+                                <input type="tel" class="form-control" id="phone" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email">
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="breed" class="form-label">Raza</label>
-                            <input type="text" class="form-control" id="breed" required>
+                        
+                        <!-- Detalles de la cita -->
+                        <div class="mb-4">
+                            <h6 class="section-title"><i class="fas fa-calendar me-2"></i> Detalles de la Cita</h6>
+                            <div class="mb-3">
+                                <label for="appointmentDate" class="form-label">Fecha</label>
+                                <input type="date" class="form-control" id="appointmentDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="appointmentTime" class="form-label">Hora</label>
+                                <input type="time" class="form-control" id="appointmentTime" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="description" rows="3"></textarea>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="age" class="form-label">Edad (años)</label>
-                            <input type="number" class="form-control" id="age" min="0" max="30" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="appointmentDate" class="form-label">Fecha</label>
-                            <input type="date" class="form-control" id="appointmentDate" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="appointmentTime" class="form-label">Hora</label>
-                            <input type="time" class="form-control" id="appointmentTime" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="description" rows="3"></textarea>
-                        </div>
+                        
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save me-1"></i> Guardar Cita
@@ -324,8 +439,7 @@
                 date: "2023-03-15",
                 time: "10:30",
                 description: "Vacuna anual y chequeo general",
-                status: "pending",
-                image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8ZG9nfHx8fHx8MTY5MjA3NTE5OA&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
+                status: "pending"
             },
             {
                 id: 2,
@@ -336,8 +450,7 @@
                 date: "2023-03-16",
                 time: "16:00",
                 description: "Problemas digestivos, revisión",
-                status: "pending",
-                image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8Y2F0fHx8fHx8MTY5MjA3NTIxMg&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
+                status: "pending"
             },
             {
                 id: 3,
@@ -348,8 +461,7 @@
                 date: "2023-03-14",
                 time: "11:00",
                 description: "Revisión anual y recorte de alas",
-                status: "accepted",
-                image: "https://images.unsplash.com/photo-1552727451-6f5671e14d83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8YmlyZHx8fHx8fDE2OTIwNzUyMzk&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
+                status: "accepted"
             },
             {
                 id: 4,
@@ -360,8 +472,7 @@
                 date: "2023-03-18",
                 time: "14:00",
                 description: "Control postoperatorio",
-                status: "accepted",
-                image: "https://images.unsplash.com/photo-1598133894008-61f7fdb8cc3a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8ZG9nfHx8fHx8MTY5MjA3NTI0NA&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
+                status: "accepted"
             },
             {
                 id: 5,
@@ -372,8 +483,7 @@
                 date: "2023-03-19",
                 time: "09:00",
                 description: "Vacuna triple felina",
-                status: "rejected",
-                image: "https://images.unsplash.com/photo-1592194996308-7b43878e84a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8Y2F0fHx8fHx8MTY5MjA3NTI1OA&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"
+                status: "rejected"
             }
         ];
 
@@ -496,6 +606,9 @@
             const animalType = document.getElementById('animalType').value;
             const breed = document.getElementById('breed').value;
             const age = document.getElementById('age').value;
+            const ownerName = document.getElementById('ownerName').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
             const date = document.getElementById('appointmentDate').value;
             const time = document.getElementById('appointmentTime').value;
             const description = document.getElementById('description').value;
@@ -510,11 +623,13 @@
                         animalType,
                         breed,
                         age: parseInt(age),
+                        ownerName,
+                        phone,
+                        email,
                         date,
                         time,
                         description,
-                        status: appointments[index].status,
-                        image: appointments[index].image
+                        status: appointments[index].status
                     };
                     
                     showToast('Cita actualizada correctamente', 'success');
@@ -528,11 +643,13 @@
                     animalType,
                     breed,
                     age: parseInt(age),
+                    ownerName,
+                    phone,
+                    email,
                     date,
                     time,
                     description,
-                    status: "pending",
-                    image: getRandomPetImage(animalType)
+                    status: "pending"
                 });
                 
                 showToast('Cita agregada correctamente', 'success');
@@ -543,7 +660,7 @@
             initChart();
         });
 
-        // Renderizar citas - MODIFICADO PARA MOSTRAR BOTÓN DE EDITAR SOLO EN ACEPTADAS
+        // Renderizar citas - SOLO información de mascota y cita
         function renderAppointments() {
             const container = document.getElementById('appointmentsList');
             container.innerHTML = '';
@@ -606,13 +723,39 @@
                     `;
                 }
                 
+                // Generar imagen según tipo de animal
+                const defaultClass = `default-${appointment.animalType}-img`;
+                const imgContent = `
+                    <div class="${defaultClass} h-100">
+                        <div class="default-img-content">
+                            <div class="default-img-icon">
+                                ${appointment.animalType === 'dog' ? '<i class="fas fa-dog"></i>' : 
+                                  appointment.animalType === 'cat' ? '<i class="fas fa-cat"></i>' : 
+                                  appointment.animalType === 'bird' ? '<i class="fas fa-dove"></i>' : 
+                                  '<i class="fas fa-paw"></i>'}
+                            </div>
+                            <div>${appointment.petName}</div>
+                        </div>
+                    </div>
+                `;
+                
                 const cardHTML = `
                     <div class="card vet-card mb-3" data-status="${appointment.status}" 
                          data-date="${appointment.date}" data-animal-type="${appointment.animalType}" 
                          data-id="${appointment.id}">
                         <div class="row g-0">
                             <div class="col-md-4 pet-img-container">
-                                <img src="${appointment.image}" alt="${appointment.breed} de ${appointment.age} años" class="pet-img">
+                                ${imgContent}
+                                <div class="pet-img-overlay">
+                                    <div class="fw-bold">${appointment.petName}</div>
+                                    <small>${appointment.breed}</small>
+                                </div>
+                                <div class="pet-type-icon">
+                                    ${appointment.animalType === 'dog' ? '<i class="fas fa-dog"></i>' : 
+                                      appointment.animalType === 'cat' ? '<i class="fas fa-cat"></i>' : 
+                                      appointment.animalType === 'bird' ? '<i class="fas fa-dove"></i>' : 
+                                      '<i class="fas fa-paw"></i>'}
+                                </div>
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
@@ -624,6 +767,7 @@
                                     <p class="card-text"><i class="fas fa-birthday-cake me-1"></i> ${appointment.age} ${appointment.age === 1 ? 'año' : 'años'}</p>
                                     <p class="card-text"><i class="fas fa-calendar-day me-1"></i> ${formatDate(appointment.date)} - ${appointment.time}</p>
                                     <p class="card-text"><i class="fas fa-file-alt me-1"></i> ${appointment.description}</p>
+                                    
                                     ${buttons}
                                 </div>
                             </div>
@@ -657,6 +801,9 @@
             document.getElementById('animalType').value = appointment.animalType;
             document.getElementById('breed').value = appointment.breed;
             document.getElementById('age').value = appointment.age;
+            document.getElementById('ownerName').value = appointment.ownerName;
+            document.getElementById('phone').value = appointment.phone;
+            document.getElementById('email').value = appointment.email;
             document.getElementById('appointmentDate').value = appointment.date;
             document.getElementById('appointmentTime').value = appointment.time;
             document.getElementById('description').value = appointment.description;
@@ -727,34 +874,6 @@
             toast.show();
         }
         
-        function getRandomPetImage(animalType) {
-            const images = {
-                dog: [
-                    'https://images.unsplash.com/photo-1543466835-00a7907e9de1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8ZG9nfHx8fHx8MTY5MjA3NTE5OA&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080',
-                    'https://images.unsplash.com/photo-1598133894008-61f7fdb8cc3a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8ZG9nfHx8fHx8MTY5MjA3NTI0NA&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080',
-                    'https://images.unsplash.com/photo-1517423568366-8b83523034fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8ZG9nfHx8fHx8MTY5MjA3NTI1Mw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080'
-                ],
-                cat: [
-                    'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8Y2F0fHx8fHx8MTY5MjA3NTIxMg&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080',
-                    'https://images.unsplash.com/photo-1592194996308-7b43878e84a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8Y2F0fHx8fHx8MTY5MjA3NTI1OA&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080',
-                    'https://images.unsplash.com/photo-1573865526739-10659fec78a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8Y2F0fHx8fHx8MTY5MjA3NTI2Nw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080'
-                ],
-                bird: [
-                    'https://images.unsplash.com/photo-1552727451-6f5671e14d83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8YmlyZHx8fHx8fDE2OTIwNzUyMzk&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080',
-                    'https://images.unsplash.com/photo-1497206365907-f5e630693df0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8YmlyZHx8fHx8fDE2OTIwNzUyNzU&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080',
-                    'https://images.unsplash.com/photo-1551085254-e96b210db58a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8YmlyZHx8fHx8fDE2OTIwNzUyODQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080'
-                ],
-                other: [
-                    'https://images.unsplash.com/photo-1553284965-5dd8352ff1bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8cmFiYml0fHx8fHx8MTY5MjA3NTI5Mw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080',
-                    'https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8cmFiYml0fHx8fHx8MTY5MjA3NTMwMw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080',
-                    'https://images.unsplash.com/photo-1550745165-9bc0b252726f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8cmF0fHx8fHx8MTY5MjA3NTMwOQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080'
-                ]
-            };
-            
-            const typeImages = images[animalType] || images['other'];
-            return typeImages[Math.floor(Math.random() * typeImages.length)];
-        }
-
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
             initChart();
@@ -764,6 +883,10 @@
             document.getElementById('filterStatus').addEventListener('change', filterAppointments);
             document.getElementById('filterDate').addEventListener('change', filterAppointments);
             document.getElementById('filterAnimal').addEventListener('change', filterAppointments);
+            
+            // Establecer fecha mínima como hoy en el formulario
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('appointmentDate').min = today;
         });
     </script>
 </body>
