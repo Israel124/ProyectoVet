@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VetCare - Reportes y Estadísticas</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --vet-primary: #4285f4;
+            --vet-secondary: #34a853;
+            --vet-danger: #ea4335;
+            --vet-light: #f8f9fa;
+            --vet-dark: #343a40;
+            --vet-purple: #9c27b0;
+            --vet-orange: #ff9800;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .vet-navbar {
+            background-color: var(--vet-primary);
+        }
+        
+        .section-title {
+            border-bottom: 2px solid var(--vet-primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .report-card {
+            background: linear-gradient(135deg, #f9f7ff 0%, #f0ebff 100%);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .stats-canvas {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            height: 300px;
+            width: 100%;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: var(--vet-primary);
+        }
+        
+        .stat-title {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+        
+        .filter-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg vet-navbar navbar-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-paw me-2"></i>
+                VetCare
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="fas fa-calendar-check me-1"></i> Citas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="clientes.html"><i class="fas fa-users me-1"></i> Clientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pacientes.html"><i class="fas fa-paw me-1"></i> Pacientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-chart-line me-1"></i> Reportes</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <!-- Sección de Reportes -->
+        <div class="section-content active" id="reports-section">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="fw-bold section-title"><i class="fas fa-chart-line text-primary me-2"></i> Reportes y Estadísticas</h2>
+                    <p class="text-muted">Visualice estadísticas mensuales de la clínica</p>
+                </div>
+            </div>
+            
+            <!-- Filtros -->
+            <div class="filter-section">
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <label for="reportYear" class="form-label">Año</label>
+                        <select id="reportYear" class="form-select">
+                            <option value="2023">2023</option>
+                            <option value="2024" selected>2024</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <label for="reportMonth" class="form-label">Mes</label>
+                        <select id="reportMonth" class="form-select">
+                            <option value="all">Todos los meses</option>
+                            <option value="1">Enero</option>
+                            <option value="2">Febrero</option>
+                            <option value="3">Marzo</option>
+                            <option value="4">Abril</option>
+                            <option value="5">Mayo</option>
+                            <option value="6">Junio</option>
+                            <option value="7">Julio</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Septiembre</option>
+                            <option value="10">Octubre</option>
+                            <option value="11">Noviembre</option>
+                            <option value="12">Diciembre</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <label for="reportType" class="form-label">Tipo de reporte</label>
+                        <select id="reportType" class="form-select">
+                            <option value="general">General</option>
+                            <option value="species">Por especie</option>
+                            <option value="procedures">Por procedimiento</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end mb-2">
+                        <button class="btn btn-primary w-100" id="generateReportBtn">
+                            <i class="fas fa-sync-alt me-2"></i> Generar Reporte
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Estadísticas resumidas -->
+            <div class="stats-container mb-4">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalClients">0</div>
+                    <div class="stat-title">Clientes Registrados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalPatients">0</div>
+                    <div class="stat-title">Pacientes Registrados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalAppointments">0</div>
+                    <div class="stat-title">Citas Mensuales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="revenue">0</div>
+                    <div class="stat-title">Ingresos Mensuales (€)</div>
+                </div>
+            </div>
+            
+            <!-- Gráficos -->
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3">
+                    <div class="card report-card">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-calendar-alt me-1"></i> Citas Mensuales</h5>
+                            <canvas id="appointmentsChart" class="stats-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card report-card">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-stethoscope me-1"></i> Consultas por Especie</h5>
+                            <canvas id="speciesChart" class="stats-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card report-card">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-chart-bar me-1"></i> Variación Mensual de Citas</h5>
+                            <canvas id="variationChart" class="stats-canvas" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tabla de reportes -->
+            <div class="card report-card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-4"><i class="fas fa-table me-1"></i> Detalle de Citas</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Paciente</th>
+                                    <th>Dueño</th>
+                                    <th>Especie</th>
+                                    <th>Procedimiento</th>
+                                    <th>Costo (€)</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="appointmentsTable">
+                                <!-- Datos de citas se cargarán dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle con Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // Datos de ejemplo para reportes
+        const appointmentsData = {
+            // Citas por mes
+            byMonth: [12, 19, 15, 17, 22, 25, 28, 26, 24, 20, 18, 15],
+            
+            // Citas por especie
+            bySpecies: {
+                Perro: 45,
+                Gato: 30,
+                Ave: 15,
+                Roedor: 7,
+                Reptil: 3
+            },
+            
+            // Variación mensual
+            monthlyVariation: {
+                citas: [120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175],
+                consultas: [80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135]
+            },
+            
+            // Detalle de citas
+            appointments: [
+                {
+                    date: "2024-01-15",
+                    patient: "Max",
+                    owner: "Juan Pérez",
+                    species: "Perro",
+                    procedure: "Vacuna anual",
+                    cost: 35,
+                    status: "Completada"
+                },
+                {
+                    date: "2024-01-16",
+                    patient: "Luna",
+                    owner: "Juan Pérez",
+                    species: "Gato",
+                    procedure: "Chequeo general",
+                    cost: 40,
+                    status: "Completada"
+                },
+                {
+                    date: "2024-01-18",
+                    patient: "Rocky",
+                    owner: "Carlos Rodríguez",
+                    species: "Perro",
+                    procedure: "Control postoperatorio",
+                    cost: 25,
+                    status: "Completada"
+                },
+                {
+                    date: "2024-01-20",
+                    patient: "Thor",
+                    owner: "Laura Martínez",
+                    species: "Perro",
+                    procedure: "Desparasitación",
+                    cost: 20,
+                    status: "Completada"
+                },
+                {
+                    date: "2024-01-22",
+                    patient: "Pico",
+                    owner: "María Gómez",
+                    species: "Ave",
+                    procedure: "Recorte de alas",
+                    cost: 15,
+                    status: "Completada"
+                }
+            ]
+        };
+
+        // Variables globales
+        let appointmentsChart = null;
+        let speciesChart = null;
+        let variationChart = null;
+
+        // Actualizar estadísticas
+        function updateStats() {
+            document.getElementById('totalClients').textContent = "42";
+            document.getElementById('totalPatients').textContent = "68";
+            document.getElementById('totalAppointments').textContent = "28";
+            document.getElementById('revenue').textContent = "1,240";
+        }
+
+        // Inicializar gráficos
+        function initCharts() {
+            // Gráfico de citas mensuales (barras)
+            const appointmentsCtx = document.getElementById('appointmentsChart').getContext('2d');
+            if (appointmentsChart) appointmentsChart.destroy();
+            
+            appointmentsChart = new Chart(appointmentsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                    datasets: [{
+                        label: 'Citas Mensuales',
+                        data: appointmentsData.byMonth,
+                        backgroundColor: '#4285f4',
+                        borderColor: '#1a56db',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Número de Citas'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Gráfico de citas por especie (pie)
+            const speciesCtx = document.getElementById('speciesChart').getContext('2d');
+            if (speciesChart) speciesChart.destroy();
+            
+            speciesChart = new Chart(speciesCtx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(appointmentsData.bySpecies),
+                    datasets: [{
+                        data: Object.values(appointmentsData.bySpecies),
+                        backgroundColor: [
+                            '#4285f4',
+                            '#34a853',
+                            '#ea4335',
+                            '#fbbc05',
+                            '#9c27b0'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            
+            // Gráfico de variación mensual (line)
+            const variationCtx = document.getElementById('variationChart').getContext('2d');
+            if (variationChart) variationChart.destroy();
+            
+            variationChart = new Chart(variationCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                    datasets: [{
+                        label: 'Citas',
+                        data: appointmentsData.monthlyVariation.citas,
+                        fill: false,
+                        borderColor: '#9c27b0',
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Consultas',
+                        data: appointmentsData.monthlyVariation.consultas,
+                        fill: false,
+                        borderColor: '#ff9800',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Cantidad'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Renderizar tabla de citas
+        function renderAppointmentsTable() {
+            const container = document.getElementById('appointmentsTable');
+            container.innerHTML = '';
+            
+            appointmentsData.appointments.forEach(appointment => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatDate(appointment.date)}</td>
+                    <td>${appointment.patient}</td>
+                    <td>${appointment.owner}</td>
+                    <td>${appointment.species}</td>
+                    <td>${appointment.procedure}</td>
+                    <td>${appointment.cost} €</td>
+                    <td><span class="badge bg-success">${appointment.status}</span></td>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // Funciones auxiliares
+        function formatDate(dateStr) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateStr).toLocaleDateString('es-ES', options);
+        }
+        
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            initCharts();
+            renderAppointmentsTable();
+            
+            // Event listener para generar reporte
+            document.getElementById('generateReportBtn').addEventListener('click', function() {
+                // Aquí iría la lógica para actualizar los gráficos según los filtros
+                showToast('Reporte generado con los nuevos filtros', 'success');
+            });
+        });
+    </script>
+</body>
+</html>
