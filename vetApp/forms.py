@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 
 
 class LoginForm(forms.Form):
@@ -44,3 +45,23 @@ class ClientesForm(forms.Form):
     direccion = forms.CharField(max_length=200, label="Dirección", required=False)
     cedula = forms.CharField(max_length=30, label="Cédula", required=False)
     fecha_nacimiento = forms.DateField(label="Fecha de nacimiento", required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+
+
+class RegistroForm(forms.Form):
+    username = forms.CharField(max_length=150, label="Usuario")
+    password = forms.CharField(widget=forms.PasswordInput, label="Contraseña")
+    password2 = forms.CharField(widget=forms.PasswordInput, label="Confirmar Contraseña")
+    email = forms.EmailField(label="Correo electrónico")
+    nombre = forms.CharField(max_length=100, label="Nombre completo")
+    telefono = forms.CharField(max_length=20, label="Teléfono")
+    direccion = forms.CharField(max_length=200, label="Dirección", required=False)
+    cedula = forms.CharField(max_length=30, label="Cédula", required=False)
+    # fecha_nacimiento = forms.DateField(label="Fecha de nacimiento", required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        password2 = cleaned_data.get("password2")
+        if password and password2 and password != password2:
+            self.add_error('password2', "Las contraseñas no coinciden.")
+        return cleaned_data
