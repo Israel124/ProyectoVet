@@ -53,7 +53,8 @@ class VRegistro(View):
             # return redirect('login')
             login(request, user )
             return redirect('home')
-        # return render(request, 'register/register.html', {'form': form})
+        
+        return render(request, 'register/register.html', {'form': form})
   
 
 def register(request):
@@ -88,7 +89,7 @@ def login_view(request):
           # print(user.clientes.cedula)
           
           messages.success(request, '¡Bienvenido de vuelta!')
-          return redirect('cliente')
+          return redirect('citas')
       else:
           messages.error(request, 'Usuario o contraseña incorrectos.')
   else: 

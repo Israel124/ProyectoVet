@@ -20,7 +20,7 @@ from vetApp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('vetApp/', include('vetApp.urls')),
+    path('', include('vetApp.urls')),
     path('gestion/', views.citas , name= 'gestion.urls'),
     path('cliente/', views.Clientes_view, name='cliente.urls'),
     path('pacientes/', views.Paciente_view, name='pacientes.urls'),
