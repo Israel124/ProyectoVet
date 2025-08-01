@@ -29,8 +29,9 @@
       </p>
       {% if user.is_authenticated %}
       <div class="d-grid gap-3 d-md-flex">
-        <a class="btn btn-primary btn-lg"> Agendar Cita </a>
-
+        {% if user.doctor %}
+        <a class="btn btn-primary btn-lg" href="{% url 'citas' %}"> ver citas </a>
+        {% endif%}
         <a class="btn btn-outline-primary btn-lg"> Ver Mis Citas </a>
       </div>
       {% else %}
@@ -43,7 +44,7 @@
     </div>
     <div class="col-md-6 d-none d-md-block">
       <img
-        src="https://img.freepik.com/free-vector/hospital-building-concept-illustration_114360-8440.jpg?w=600&h=400&fit=crop"
+        src="https://img.freepik.com/vector-premium/veterinario-o-clinica-veterinaria-ilustracion-vector-mascota_353502-569.jpg?w=2000"
         alt="Ilustración de hospital"
         class="img-fluid rounded shadow"
       />

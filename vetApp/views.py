@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm #crea usuarios
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 def home(request):
   
@@ -20,6 +21,7 @@ def home(request):
   
   return render(request, 'Home/home.html', contexto)
 
+@login_required
 def citas(request):
   
     contexto = {}
@@ -86,10 +88,18 @@ def login_view(request):
       if user is not None:
           login(request, user)
           
+          
+          
           # print(user.clientes.cedula)
           
           messages.success(request, '¡Bienvenido de vuelta!')
-          return redirect('citas')
+          
+          if hasattr(user, 'doctor'):
+              return redirect('citas')
+              
+          else: 
+            print("entro aca")
+            return redirect('home')
       else:
           messages.error(request, 'Usuario o contraseña incorrectos.')
   else: 
@@ -116,6 +126,7 @@ def logout_view(request):
     messages.success(request, "Sesión cerrada correctamente.")
     return redirect('login')
 
+@login_required
 # Vista de pacientes
 def Paciente_view(request):
     if request.method == 'POST':
@@ -130,7 +141,8 @@ def Paciente_view(request):
     return render(request, 'paciente/Pacientes.html', {
         'form': form
     })
-
+    
+@login_required
 # Vista de reportes
 def Reportes_view(request):
     if request.method == 'POST':
@@ -141,7 +153,8 @@ def Reportes_view(request):
     return render(request, 'reportes/Reportes.html', {
         'form': form
     })
-
+    
+@login_required
 def Clientes_view(request):
     if request.method == 'POST':
         form = ClientesForm(request.POST)

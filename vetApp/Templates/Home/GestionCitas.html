@@ -221,16 +221,21 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#"><i class="fas fa-calendar-check me-1"></i> Citas</a>
+                        <a class="nav-link active" href="{% url 'citas' %}"><i class="fas fa-calendar-check me-1"></i> Citas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-users me-1"></i> Clientes</a>
+                        <a class="nav-link" href="{% url 'cliente' %}"><i class="fas fa-users me-1"></i> Clientes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-paw me-1"></i> Pacientes</a>
+                        <a class="nav-link" href="{% url 'pacientes' %}"><i class="fas fa-paw me-1"></i> Pacientes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-chart-line me-1"></i> Reportes</a>
+                        <a class="nav-link" href="{% url 'reportes' %}"><i class="fas fa-chart-line me-1"></i> Reportes</a>
+                    </li>
+                     <li>
+                        <a class="dropdown-item" href="{% url 'logout' %}">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </a>
                     </li>
                 </ul>
             </div>
