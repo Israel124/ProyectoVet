@@ -159,4 +159,4 @@ def Clientes_view(request):
             return redirect('cliente')
     else:
         form = ClientesForm()
-    return render(request, 'Clientes/Clientes.html', {'form': form})
+    return render(request, 'GClientes/GestionClientes.html', {'form': form})
