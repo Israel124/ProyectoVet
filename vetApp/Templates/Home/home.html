@@ -1,6 +1,9 @@
-{% extends 'shared/base.html' %} {% block title %}Inicio{% endblock %} 
+{% extends 'shared/base.html' %} 
+{% block title %}VetCare - Inicio{% endblock %} 
+
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-4">
+  <!-- Mensajes de alerta -->
   {% if messages %}
   <div class="messages mb-4">
     {% for message in messages %}
@@ -20,240 +23,461 @@
   </div>
   {% endif %}
 
-  <div class="row align-items-center mb-5">
-    <div class="col-md-6">
-      <h1 class="display-4 fw-bold mb-4">Tu salud es nuestra prioridad</h1>
-      <p class="lead mb-4">
-        Agenda tus citas médicas de manera fácil y rápida con los mejores
-        profesionales de la salud.
-      </p>
-      {% if user.is_authenticated %}
-      <div class="d-grid gap-3 d-md-flex">
-        {% if user.doctor %}
-        <a class="btn btn-primary btn-lg" href="{% url 'citas' %}"> ver citas </a>
-        {% endif%}
-        <a class="btn btn-outline-primary btn-lg"> Ver Mis Citas </a>
+  <!-- Hero Section -->
+  <section class="hero-section position-relative text-white py-5 rounded-4 overflow-hidden mb-5" 
+            style="background: linear-gradient(135deg, #1a56db, #0e7490);">
+    <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100" 
+         style="background: url('https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') center/cover; opacity: 0.15;"></div>
+    
+    <div class="container position-relative z-1">
+      <div class="row align-items-center">
+        <div class="col-lg-6 text-center text-lg-start">
+          <h1 class="display-4 fw-bold mb-4">Cuidado profesional para tu compañero de vida</h1>
+          <p class="lead mb-5">En VetCare, combinamos medicina avanzada con atención compasiva para garantizar la salud y felicidad de tu mejor amigo.</p>
+          
+          <div class="d-flex flex-wrap gap-3">
+            {% if user.is_authenticated %}
+              {% if user.doctor %}
+              <a href="{% url 'citas' %}" class="btn btn-light btn-lg fw-bold px-4 py-3">
+                <i class="fas fa-calendar-alt me-2"></i>Ver Citas
+              </a>
+              {% endif %}
+              <a href="#" class="btn btn-outline-light btn-lg fw-bold px-4 py-3">
+                <i class="fas fa-paw me-2"></i>Mis Citas
+              </a>
+            {% else %}
+              <a href="#" class="btn btn-light btn-lg fw-bold px-4 py-3">
+                <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+              </a>
+              <a href="#" class="btn btn-outline-light btn-lg fw-bold px-4 py-3">
+                <i class="fas fa-user-plus me-2"></i>Registrarse
+              </a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block text-center">
+          <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+               alt="Mascotas felices" 
+               class="img-fluid rounded-4 shadow-lg" 
+               style="max-height: 400px;">
+        </div>
       </div>
-      {% else %}
-      <div class="d-grid gap-3 d-md-flex">
-        <a class="btn btn-primary btn-lg"> Iniciar Sesión </a>
+    </div>
+  </section>
 
-        <a class="btn btn-outline-primary btn-lg"> Registrarse </a>
-      </div>
-      {% endif %}
-    </div>
-    <div class="col-md-6 d-none d-md-block">
-      <img
-        src="https://img.freepik.com/vector-premium/veterinario-o-clinica-veterinaria-ilustracion-vector-mascota_353502-569.jpg?w=2000"
-        alt="Ilustración de hospital"
-        class="img-fluid rounded shadow"
-      />
-    </div>
-  </div>
-
-  <!-- <div class="row g-4 py-5">
-    <div class="col-md-4">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body text-center p-4">
-          <i class="fas fa-calendar-check fa-3x text-primary mb-3"></i>
-          <h3 class="card-title h4">Agenda Online</h3>
-          <p class="card-text">
-            Programa tus citas médicas en cualquier momento, desde cualquier
-            lugar.
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body text-center p-4">
-          <i class="fas fa-user-md fa-3x text-primary mb-3"></i>
-          <h3 class="card-title h4">Profesionales Calificados</h3>
-          <p class="card-text">
-            Accede a una red de médicos especialistas altamente calificados.
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body text-center p-4">
-          <i class="fas fa-clock fa-3x text-primary mb-3"></i>
-          <h3 class="card-title h4">Horarios Flexibles</h3>
-          <p class="card-text">
-            Encuentra el horario que mejor se adapte a tu agenda.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div> -->
-  
-   {% if user.is_authenticated and user.is_staff %}
-  <div class="row mt-5">
-    <div class="col-12">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h3 class="card-title">Panel de Administración</h3>
-          <p class="card-text">
-            Accede al panel de administración para gestionar usuarios, citas y
-            más.
-          </p>
-          <a href="/admin/" class="btn btn-primary">
-            Ir al Panel de Administración
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endif %}
-  <!-- Services Section -->
-  <section id="services" class="py-5 bg-white">
-    <div class="container text-center">
-      <h2 class="display-5 text-primary fw-bold mb-4">
-        Nuestros Servicios Integrales
-      </h2>
+  <!-- Stats Section -->
+  <section class="py-5 bg-light rounded-4 mb-5">
+    <div class="container">
       <div class="row g-4">
-        <!-- Reutilizable Card -->
+        <div class="col-md-3 col-6">
+          <div class="stat-card bg-white rounded-4 shadow-sm p-4 text-center">
+            <div class="stat-number text-primary fw-bold mb-2">15,000+</div>
+            <div class="text-muted">Mascotas atendidas</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="stat-card bg-white rounded-4 shadow-sm p-4 text-center">
+            <div class="stat-number text-primary fw-bold mb-2">98%</div>
+            <div class="text-muted">Satisfacción del cliente</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="stat-card bg-white rounded-4 shadow-sm p-4 text-center">
+            <div class="stat-number text-primary fw-bold mb-2">24/7</div>
+            <div class="text-muted">Servicio de emergencia</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="stat-card bg-white rounded-4 shadow-sm p-4 text-center">
+            <div class="stat-number text-primary fw-bold mb-2">12+</div>
+            <div class="text-muted">Especialistas veterinarios</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="py-5 mb-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="display-5 text-primary fw-bold mb-3">Nuestros Servicios</h2>
+        <p class="lead text-muted">Ofrecemos una amplia gama de servicios para mantener a tu mascota saludable y feliz</p>
+      </div>
+      
+      <div class="row g-4">
+        <!-- Consultas Generales -->
         <div class="col-md-4">
-          <div class="card border border-primary h-100">
-            <div class="card-body text-center">
-              <img
-                src="https://placehold.co/100x100/A5B4FC/FFFFFF?text=Veterinaria"
-                class="rounded-circle border border-primary mb-3"
-                alt="Consulta Veterinaria"
-              />
-              <h5 class="card-title text-primary">Consultas Generales</h5>
-              <p class="card-text">
-                Exámenes de rutina, diagnósticos y atención preventiva para
-                mantener a tu mascota sana y feliz.
-              </p>
+          <div class="service-card card border-0 shadow-sm h-100">
+            <div class="card-body p-4 text-center">
+              <div class="service-icon bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                <i class="fas fa-stethoscope fa-2x"></i>
+              </div>
+              <h4 class="card-title mb-3 text-primary">Consultas Generales</h4>
+              <p class="card-text text-muted">Exámenes completos de salud, diagnósticos precisos y planes de tratamiento personalizados para tu mascota.</p>
             </div>
           </div>
         </div>
+        
         <!-- Vacunación -->
         <div class="col-md-4">
-          <div class="card border border-success h-100">
-            <div class="card-body text-center">
-              <img
-                src="https://placehold.co/100x100/A7F3D0/FFFFFF?text=Vacunas"
-                class="rounded-circle border border-success mb-3"
-                alt="Vacunación"
-              />
-              <h5 class="card-title text-success">
-                Vacunación y Desparasitación
-              </h5>
-              <p class="card-text">
-                Programas personalizados de vacunación y control de parásitos
-                internos y externos.
-              </p>
+          <div class="service-card card border-0 shadow-sm h-100">
+            <div class="card-body p-4 text-center">
+              <div class="service-icon bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                <i class="fas fa-syringe fa-2x"></i>
+              </div>
+              <h4 class="card-title mb-3 text-success">Vacunación</h4>
+              <p class="card-text text-muted">Programas de vacunación adaptados a cada mascota para prevenir enfermedades comunes y peligrosas.</p>
             </div>
           </div>
         </div>
+        
         <!-- Cirugía -->
         <div class="col-md-4">
-          <div class="card border border-secondary h-100">
-            <div class="card-body text-center">
-              <img
-                src="https://placehold.co/100x100/DDD6FE/FFFFFF?text=Cirugía"
-                class="rounded-circle border border-secondary mb-3"
-                alt="Cirugía"
-              />
-              <h5 class="card-title text-secondary">
-                Cirugía y Hospitalización
-              </h5>
-              <p class="card-text">
-                Instalaciones modernas para procedimientos quirúrgicos y
-                cuidados post-operatorios.
-              </p>
+          <div class="service-card card border-0 shadow-sm h-100">
+            <div class="card-body p-4 text-center">
+              <div class="service-icon bg-danger bg-opacity-10 text-danger rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                <i class="fas fa-cut fa-2x"></i>
+              </div>
+              <h4 class="card-title mb-3 text-danger">Cirugía</h4>
+              <p class="card-text text-muted">Procedimientos quirúrgicos avanzados realizados por especialistas con tecnología de última generación.</p>
             </div>
           </div>
         </div>
+        
         <!-- Estética -->
         <div class="col-md-4">
-          <div class="card border border-warning h-100">
-            <div class="card-body text-center">
-              <img
-                src="https://placehold.co/100x100/FDE68A/FFFFFF?text=Estética"
-                class="rounded-circle border border-warning mb-3"
-                alt="Estética"
-              />
-              <h5 class="card-title text-warning">Estética y Peluquería</h5>
-              <p class="card-text">
-                Baño, corte de pelo y tratamientos de belleza para consentir a
-                tu mascota.
-              </p>
+          <div class="service-card card border-0 shadow-sm h-100">
+            <div class="card-body p-4 text-center">
+              <div class="service-icon bg-warning bg-opacity-10 text-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                <i class="fas fa-bath fa-2x"></i>
+              </div>
+              <h4 class="card-title mb-3 text-warning">Estética</h4>
+              <p class="card-text text-muted">Servicios de peluquería y estética profesional para mantener a tu mascota con el mejor aspecto.</p>
             </div>
           </div>
         </div>
+        
         <!-- Urgencias -->
         <div class="col-md-4">
-          <div class="card border border-danger h-100">
-            <div class="card-body text-center">
-              <img
-                src="https://placehold.co/100x100/FECACA/FFFFFF?text=Urgencias"
-                class="rounded-circle border border-danger mb-3"
-                alt="Urgencias"
-              />
-              <h5 class="card-title text-danger">Urgencias 24/7</h5>
-              <p class="card-text">
-                Atención veterinaria de emergencia las 24 horas del día, todos
-                los días.
-              </p>
+          <div class="service-card card border-0 shadow-sm h-100">
+            <div class="card-body p-4 text-center">
+              <div class="service-icon bg-info bg-opacity-10 text-info rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                <i class="fas fa-ambulance fa-2x"></i>
+              </div>
+              <h4 class="card-title mb-3 text-info">Urgencias 24/7</h4>
+              <p class="card-text text-muted">Atención veterinaria de emergencia las 24 horas del día, todos los días del año.</p>
             </div>
           </div>
         </div>
+        
         <!-- Laboratorio -->
         <div class="col-md-4">
-          <div class="card border border-info h-100">
-            <div class="card-body text-center">
-              <img
-                src="https://placehold.co/100x100/99F6E4/FFFFFF?text=Laboratorio"
-                class="rounded-circle border border-info mb-3"
-                alt="Laboratorio"
-              />
-              <h5 class="card-title text-info">Laboratorio y Diagnóstico</h5>
-              <p class="card-text">
-                Análisis clínicos avanzados para diagnósticos precisos y
-                oportunos.
-              </p>
+          <div class="service-card card border-0 shadow-sm h-100">
+            <div class="card-body p-4 text-center">
+              <div class="service-icon bg-purple bg-opacity-10 text-purple rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                <i class="fas fa-microscope fa-2x"></i>
+              </div>
+              <h4 class="card-title mb-3 text-purple">Laboratorio</h4>
+              <p class="card-text text-muted">Análisis clínicos avanzados para diagnósticos precisos y oportunos.</p>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
- 
-   <!-- About Us -->
-    <section class="py-5 bg-light" id="about">
-      <div
-        class="container d-flex flex-column flex-md-row align-items-center gap-4"
-      >
-        <div class="col-md-6">
-          <img
-            src="https://placehold.co/600x400/818CF8/FFFFFF?text=Veterinarios+Profesionales"
-            class="img-fluid rounded shadow border border-primary"
-            alt="Nuestro Equipo Veterinario"
-          />
+
+  <!-- About Section -->
+  <section id="about" class="py-5 bg-light rounded-4 mb-5">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <div class="position-relative">
+            <img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Nuestro equipo" 
+                 class="img-fluid rounded-4 shadow-lg">
+            <div class="position-absolute top-0 start-0 bg-primary text-white p-3 rounded-end" style="transform: translateY(-20px);">
+              <h5 class="mb-0">Desde 2010</h5>
+              <small>Cuidando a tus mascotas</small>
+            </div>
+          </div>
         </div>
-        <div class="col-md-6">
-          <h2 class="text-primary fw-bold mb-3">Sobre Nosotros</h2>
-          <p class="mb-3">
-            Contamos con un equipo profesional apasionado, dedicado al cuidado
-            integral de tus mascotas. Nuestras instalaciones modernas aseguran
-            diagnósticos precisos y tratamientos eficaces.
-          </p>
-          <p>
-            Promovemos la medicina preventiva y la educación de los dueños para
-            mejorar la calidad de vida de cada mascota.
-          </p>
+        <div class="col-lg-6">
+          <h2 class="text-primary fw-bold mb-4">Sobre <span class="text-secondary">VetCare</span></h2>
+          <p class="lead mb-4">Más que una clínica veterinaria, somos un equipo apasionado por el bienestar animal.</p>
+          
+          <div class="d-flex mb-4">
+            <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center me-4" style="width: 60px; height: 60px;">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <div>
+              <h5>Profesionales Certificados</h5>
+              <p class="text-muted mb-0">Nuestro equipo cuenta con especialistas en diversas áreas de la medicina veterinaria.</p>
+            </div>
+          </div>
+          
+          <div class="d-flex mb-4">
+            <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center me-4" style="width: 60px; height: 60px;">
+              <i class="fas fa-microscope"></i>
+            </div>
+            <div>
+              <h5>Tecnología Avanzada</h5>
+              <p class="text-muted mb-0">Contamos con equipos de diagnóstico de última generación para resultados precisos.</p>
+            </div>
+          </div>
+          
+          <div class="d-flex">
+            <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center me-4" style="width: 60px; height: 60px;">
+              <i class="fas fa-heart"></i>
+            </div>
+            <div>
+              <h5>Atención Personalizada</h5>
+              <p class="text-muted mb-0">Cada mascota recibe un plan de tratamiento diseñado específicamente para sus necesidades.</p>
+            </div>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-5 mb-5">
+    <div class="container">
+      <div class="cta-section bg-primary text-white p-5 rounded-4">
+        <div class="row align-items-center">
+          <div class="col-lg-8">
+            <h2 class="mb-3">¿Necesitas ayuda inmediata para tu mascota?</h2>
+            <p class="mb-0">Nuestro servicio de emergencias está disponible las 24 horas, todos los días del año.</p>
+          </div>
+          <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+            <a href="tel:+50512345678" class="btn btn-light btn-lg px-4 py-3 fw-bold">
+              <i class="fas fa-phone-alt me-2"></i>Llamar ahora
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="testimonials" class="py-5 bg-light rounded-4 mb-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="display-5 text-primary fw-bold mb-3">Lo que dicen nuestros clientes</h2>
+        <p class="lead text-muted">Historias de mascotas felices y dueños satisfechos</p>
+      </div>
+      
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="testimonial-card bg-white rounded-4 shadow-sm p-4 h-100">
+            <div class="d-flex align-items-center mb-4">
+              <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Cliente" class="testimonial-avatar rounded-circle me-3" style="width: 70px; height: 70px;">
+              <div>
+                <h5 class="mb-0">María Rodríguez</h5>
+                <small class="text-muted">Dueña de Max (Golden Retriever)</small>
+              </div>
+            </div>
+            <p class="mb-0">"Cuando Max tuvo una emergencia a medianoche, el equipo de VetCare lo atendió inmediatamente. Su profesionalismo y cuidado salvaron la vida de mi perro. ¡Eternamente agradecida!"</p>
+            <div class="mt-3 text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="testimonial-card bg-white rounded-4 shadow-sm p-4 h-100">
+            <div class="d-flex align-items-center mb-4">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Cliente" class="testimonial-avatar rounded-circle me-3" style="width: 70px; height: 70px;">
+              <div>
+                <h5 class="mb-0">Carlos Martínez</h5>
+                <small class="text-muted">Dueño de Luna (Gata siamesa)</small>
+              </div>
+            </div>
+            <p class="mb-0">"Llevo a Luna aquí desde que era un gatito. El seguimiento que hacen a su salud es excepcional. Siempre explican todo con detalle y se nota que realmente aman a los animales."</p>
+            <div class="mt-3 text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="testimonial-card bg-white rounded-4 shadow-sm p-4 h-100">
+            <div class="d-flex align-items-center mb-4">
+              <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Cliente" class="testimonial-avatar rounded-circle me-3" style="width: 70px; height: 70px;">
+              <div>
+                <h5 class="mb-0">Ana García</h5>
+                <small class="text-muted">Dueña de Rocky (Bulldog francés)</small>
+              </div>
+            </div>
+            <p class="mb-0">"La cirugía que le hicieron a Rocky fue un éxito total. El seguimiento postoperatorio fue impecable y ahora está más feliz que nunca. Gracias por cuidar de mi pequeño como si fuera suyo."</p>
+            <div class="mt-3 text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Admin Panel -->
+  {% if user.is_authenticated and user.is_staff %}
+  <section class="py-5 mb-5">
+    <div class="container">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-5">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h3 class="card-title text-primary">Panel de Administración</h3>
+              <p class="card-text">
+                Accede al panel de administración para gestionar usuarios, citas y más.
+              </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+              <a href="/admin/" class="btn btn-primary btn-lg px-4 py-3">
+                <i class="fas fa-cogs me-2"></i>Ir al Panel
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
   <!-- Footer -->
-  <footer class="bg-light text-center text-muted py-3 mt-4">
-    <small
-      >© 2025 Veterinaria MiMascota - Todos los derechos reservados</small
-    >
+  <footer class="bg-dark text-white py-5 rounded-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <h4 class="mb-4">
+            <i class="fas fa-paw me-2 text-primary"></i>
+            Veterinaria <span class="text-primary">VetCare</span>
+          </h4>
+          <p class="text-white-50">Ofrecemos atención veterinaria de alta calidad con tecnología avanzada y un equipo de profesionales apasionados por el bienestar animal.</p>
+          <div class="mt-4">
+            <a href="#" class="social-icon d-inline-flex align-items-center justify-content-center rounded-circle me-2" style="width: 40px; height: 40px; background: rgba(255,255,255,0.1);">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-icon d-inline-flex align-items-center justify-content-center rounded-circle me-2" style="width: 40px; height: 40px; background: rgba(255,255,255,0.1);">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="social-icon d-inline-flex align-items-center justify-content-center rounded-circle me-2" style="width: 40px; height: 40px; background: rgba(255,255,255,0.1);">
+              <i class="fab fa-twitter"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <h5 class="text-white mb-4">Horario de atención</h5>
+          <ul class="list-unstyled text-white-50">
+            <li class="mb-2"><i class="far fa-clock me-2"></i> Lunes a Viernes: 8:00 AM - 8:00 PM</li>
+            <li class="mb-2"><i class="far fa-clock me-2"></i> Sábados: 9:00 AM - 4:00 PM</li>
+            <li><i class="far fa-clock me-2"></i> Domingos: Solo emergencias</li>
+          </ul>
+        </div>
+        
+        <div class="col-lg-4">
+          <h5 class="text-white mb-4">Contáctanos</h5>
+          <ul class="list-unstyled text-white-50">
+            <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> Av. Las Mascotas #123, Managua</li>
+            <li class="mb-2"><i class="fas fa-phone-alt me-2"></i> (505) 2222-3333</li>
+            <li><i class="fas fa-envelope me-2"></i> info@vetcare.com</li>
+          </ul>
+        </div>
+      </div>
+      
+      <hr class="mt-5 border-secondary">
+      
+      <div class="text-center py-4 text-white-50">
+        <small>© 2025 Veterinaria VetCare. Todos los derechos reservados.</small>
+      </div>
+    </div>
   </footer>
 </div>
+
+<!-- Estilos adicionales -->
+<style>
+  .hero-section {
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .service-card {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 100%;
+  }
+  
+  .service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  }
+  
+  .stat-card {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  
+  .testimonial-card {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+  }
+  
+  .cta-section {
+    background: linear-gradient(135deg, #0e7490, #1a56db);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+  }
+  
+  .social-icon {
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  
+  .social-icon:hover {
+    background: #1a56db !important;
+    transform: translateY(-5px);
+  }
+</style>
+
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- Estilos de fuentes -->
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    color: #1f2937;
+  }
+  
+  h1, h2, h3, h4, h5 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+  }
+</style>
 {% endblock %}

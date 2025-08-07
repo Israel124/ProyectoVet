@@ -1,0 +1,627 @@
+{% extends 'base.html' %}
+
+{% block title %}VetCare - Gestión de Clientes{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --vet-primary: #1a56db;
+        --vet-secondary: #0e7490;
+        --vet-accent: #f59e0b;
+        --vet-light: #f3f4f6;
+        --vet-dark: #1f2937;
+        --vet-success: #10b981;
+        --vet-card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    .section-title {
+        position: relative;
+        padding-bottom: 15px;
+        margin-bottom: 30px;
+        font-weight: 700;
+        color: var(--vet-primary);
+    }
+    
+    .section-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 4px;
+        background: var(--vet-accent);
+        border-radius: 2px;
+    }
+    
+    .vet-card {
+        transition: all 0.3s ease;
+        border-radius: 12px;
+        overflow: hidden;
+        border: none;
+        box-shadow: var(--vet-card-shadow);
+        height: 100%;
+    }
+    
+    .vet-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
+    
+    .owner-card-header {
+        background: linear-gradient(135deg, var(--vet-primary), var(--vet-secondary));
+        color: white;
+        padding: 20px;
+    }
+    
+    .pets-badge {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 20px;
+        padding: 5px 15px;
+        font-weight: 500;
+    }
+    
+    .owner-info-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 15px;
+    }
+    
+    .owner-info-item i {
+        width: 24px;
+        color: var(--vet-primary);
+        margin-top: 4px;
+    }
+    
+    .owner-info-content {
+        margin-left: 10px;
+    }
+    
+    .pets-list {
+        background: var(--vet-light);
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 15px;
+    }
+    
+    .pet-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .pet-item:last-child {
+        border-bottom: none;
+    }
+    
+    .pet-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(26, 86, 219, 0.1);
+        margin-right: 15px;
+        color: var(--vet-primary);
+    }
+    
+    .search-container {
+        position: relative;
+    }
+    
+    .search-container i {
+        position: absolute;
+        left: 15px;
+        top: 12px;
+        color: var(--vet-primary);
+    }
+    
+    .search-input {
+        padding-left: 45px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        height: 50px;
+        font-size: 1.05rem;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+    
+    .btn-edit {
+        background: var(--vet-primary);
+        color: white;
+        border-radius: 8px;
+        padding: 8px 20px;
+    }
+    
+    .btn-delete {
+        background: #f8d7da;
+        color: #b91c1c;
+        border-radius: 8px;
+        padding: 8px 20px;
+    }
+    
+    .modal-header {
+        background: linear-gradient(135deg, var(--vet-primary), var(--vet-secondary));
+        color: white;
+    }
+    
+    .btn-close-white {
+        filter: invert(1);
+    }
+    
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1050;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Encabezado -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h1 class="section-title"><i class="fas fa-users me-2"></i> Gestión de Clientes</h1>
+            <p class="lead">Administre la información de los dueños de mascotas</p>
+        </div>
+    </div>
+    
+    <!-- Búsqueda y Acciones -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="clientSearch" class="form-control search-input" 
+                       placeholder="Buscar cliente por nombre, teléfono o email...">
+            </div>
+        </div>
+        <div class="col-md-6 d-flex justify-content-end">
+            <button class="btn btn-primary btn-lg" id="addClientBtn" 
+                    data-bs-toggle="modal" data-bs-target="#clientModal">
+                <i class="fas fa-plus me-2"></i> Nuevo Cliente
+            </button>
+        </div>
+    </div>
+    
+    <!-- Listado de Clientes -->
+    <div class="row" id="clientsList">
+        <!-- Clientes se cargarán dinámicamente -->
+    </div>
+</div>
+
+<!-- Modal para agregar/editar cliente -->
+<div class="modal fade" id="clientModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalClientTitle">Agregar Nuevo Cliente</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="clientForm">
+                    <input type="hidden" id="clientId">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="firstName" class="form-label fw-bold">Nombre</label>
+                            <input type="text" class="form-control form-control-lg" id="firstName" required>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="lastName" class="form-label fw-bold">Apellido</label>
+                            <input type="text" class="form-control form-control-lg" id="lastName" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="phone" class="form-label fw-bold">Teléfono</label>
+                            <input type="tel" class="form-control form-control-lg" id="phone" required>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="email" class="form-label fw-bold">Email</label>
+                            <input type="email" class="form-control form-control-lg" id="email">
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="address" class="form-label fw-bold">Dirección</label>
+                        <textarea class="form-control form-control-lg" id="address" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="saveClientBtn">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="confirmationModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title">Confirmar acción</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                ¿Está seguro de que desea realizar esta acción?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmActionBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast notifications -->
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-success text-white">
+            <strong class="me-auto"><i class="fas fa-check-circle me-2"></i>Éxito</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Operación realizada con éxito.
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Datos de ejemplo para clientes (dueños)
+    let owners = [
+        {
+            id: 1,
+            firstName: "Juan",
+            lastName: "Pérez",
+            phone: "555-1234",
+            email: "juan.perez@example.com",
+            address: "Calle Principal 123",
+            pets: [1, 2]
+        },
+        {
+            id: 2,
+            firstName: "María",
+            lastName: "Gómez",
+            phone: "555-5678",
+            email: "maria.gomez@example.com",
+            address: "Avenida Central 456",
+            pets: [3]
+        },
+        {
+            id: 3,
+            firstName: "Carlos",
+            lastName: "Rodríguez",
+            phone: "555-9012",
+            email: "carlos.rodriguez@example.com",
+            address: "Boulevard Norte 789",
+            pets: [4, 5]
+        },
+        {
+            id: 4,
+            firstName: "Laura",
+            lastName: "Martínez",
+            phone: "555-3456",
+            email: "laura.martinez@example.com",
+            address: "Calle Sur 101",
+            pets: [6]
+        }
+    ];
+
+    // Datos de ejemplo para pacientes (mascotas)
+    let patients = [
+        {
+            id: 1,
+            name: "Max",
+            species: "Perro",
+            breed: "Golden Retriever",
+            birthDate: "2020-05-15",
+            ownerId: 1
+        },
+        {
+            id: 2,
+            name: "Luna",
+            species: "Gato",
+            breed: "Siamés",
+            birthDate: "2021-02-20",
+            ownerId: 1
+        },
+        {
+            id: 3,
+            name: "Pico",
+            species: "Ave",
+            breed: "Periquito Australiano",
+            birthDate: "2022-08-10",
+            ownerId: 2
+        },
+        {
+            id: 4,
+            name: "Rocky",
+            species: "Perro",
+            breed: "Bulldog Francés",
+            birthDate: "2019-11-05",
+            ownerId: 3
+        },
+        {
+            id: 5,
+            name: "Nala",
+            species: "Gato",
+            breed: "Persa",
+            birthDate: "2018-06-30",
+            ownerId: 3
+        },
+        {
+            id: 6,
+            name: "Thor",
+            species: "Perro",
+            breed: "Pastor Alemán",
+            birthDate: "2020-09-12",
+            ownerId: 4
+        }
+    ];
+
+    // Variables globales
+    let currentClientId = null;
+
+    // Renderizar clientes (dueños)
+    function renderClients() {
+        const container = document.getElementById('clientsList');
+        container.innerHTML = '';
+        
+        const searchTerm = document.getElementById('clientSearch').value.toLowerCase();
+        
+        const filteredOwners = owners.filter(owner => {
+            const fullName = `${owner.firstName} ${owner.lastName}`.toLowerCase();
+            return fullName.includes(searchTerm) || 
+                   owner.phone.includes(searchTerm) || 
+                   (owner.email && owner.email.toLowerCase().includes(searchTerm));
+        });
+        
+        if (filteredOwners.length === 0) {
+            container.innerHTML = `
+                <div class="col-12">
+                    <div class="alert alert-info text-center py-4">
+                        <i class="fas fa-info-circle fa-2x mb-3"></i>
+                        <h4>No se encontraron clientes</h4>
+                        <p class="mb-0">Intente con otros términos de búsqueda</p>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+        
+        filteredOwners.forEach(owner => {
+            // Obtener mascotas de este dueño
+            const ownerPets = patients.filter(pet => owner.pets.includes(pet.id));
+            
+            const cardHTML = `
+                <div class="col-lg-6 mb-4">
+                    <div class="vet-card">
+                        <div class="owner-card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0">${owner.firstName} ${owner.lastName}</h4>
+                                <span class="pets-badge">${ownerPets.length} mascota${ownerPets.length !== 1 ? 's' : ''}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div class="owner-info-item">
+                                <i class="fas fa-phone"></i>
+                                <div class="owner-info-content">
+                                    <h6 class="mb-1">Teléfono</h6>
+                                    <p class="mb-0">${owner.phone}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="owner-info-item">
+                                <i class="fas fa-envelope"></i>
+                                <div class="owner-info-content">
+                                    <h6 class="mb-1">Email</h6>
+                                    <p class="mb-0">${owner.email || 'No registrado'}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="owner-info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div class="owner-info-content">
+                                    <h6 class="mb-1">Dirección</h6>
+                                    <p class="mb-0">${owner.address || 'No registrada'}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="pets-list">
+                                <h6><i class="fas fa-paw me-2"></i> Mascotas</h6>
+                                <div class="mt-3">
+                                    ${ownerPets.length > 0 ? ownerPets.map(pet => `
+                                        <div class="pet-item">
+                                            <div class="pet-icon">
+                                                ${pet.species === 'Perro' ? '<i class="fas fa-dog"></i>' : 
+                                                  pet.species === 'Gato' ? '<i class="fas fa-cat"></i>' : 
+                                                  '<i class="fas fa-paw"></i>'}
+                                            </div>
+                                            <div>
+                                                <strong>${pet.name}</strong>
+                                                <div class="text-muted">${pet.breed} • ${pet.species}</div>
+                                            </div>
+                                        </div>
+                                    `).join('') : '<p class="mb-0 text-center">No tiene mascotas registradas</p>'}
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons mt-4">
+                                <button class="btn btn-edit" onclick="editClient(${owner.id})">
+                                    <i class="fas fa-edit me-1"></i> Editar
+                                </button>
+                                <button class="btn btn-delete" onclick="confirmDeleteClient(${owner.id})">
+                                    <i class="fas fa-trash me-1"></i> Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', cardHTML);
+        });
+    }
+
+    // Abrir modal para agregar nuevo cliente
+    function openAddClientModal() {
+        document.getElementById('modalClientTitle').textContent = 'Agregar Nuevo Cliente';
+        document.getElementById('clientForm').reset();
+        document.getElementById('clientId').value = '';
+        currentClientId = null;
+        
+        const modal = new bootstrap.Modal(document.getElementById('clientModal'));
+        modal.show();
+    }
+
+    // Editar cliente
+    function editClient(id) {
+        const client = owners.find(o => o.id === id);
+        if (!client) return;
+        
+        document.getElementById('modalClientTitle').textContent = 'Editar Cliente';
+        document.getElementById('clientId').value = client.id;
+        document.getElementById('firstName').value = client.firstName;
+        document.getElementById('lastName').value = client.lastName;
+        document.getElementById('phone').value = client.phone;
+        document.getElementById('email').value = client.email || '';
+        document.getElementById('address').value = client.address || '';
+        
+        currentClientId = id;
+        
+        const modal = new bootstrap.Modal(document.getElementById('clientModal'));
+        modal.show();
+    }
+
+    // Guardar cliente
+    function saveClient() {
+        const id = document.getElementById('clientId').value;
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+        const address = document.getElementById('address').value;
+        
+        if (!firstName || !lastName || !phone) {
+            showToast('Por favor complete los campos obligatorios', 'error');
+            return;
+        }
+        
+        if (id) {
+            // Editar cliente existente
+            const index = owners.findIndex(o => o.id == id);
+            if (index !== -1) {
+                owners[index] = {
+                    ...owners[index],
+                    firstName,
+                    lastName,
+                    phone,
+                    email: email || undefined,
+                    address: address || undefined
+                };
+                
+                showToast('Cliente actualizado correctamente', 'success');
+            }
+        } else {
+            // Agregar nuevo cliente
+            const newId = owners.length > 0 ? Math.max(...owners.map(o => o.id)) + 1 : 1;
+            owners.push({
+                id: newId,
+                firstName,
+                lastName,
+                phone,
+                email: email || undefined,
+                address: address || undefined,
+                pets: []
+            });
+            
+            showToast('Cliente agregado correctamente', 'success');
+        }
+        
+        renderClients();
+        
+        // Cerrar modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('clientModal'));
+        modal.hide();
+    }
+
+    // Confirmar eliminación de cliente
+    function confirmDeleteClient(id) {
+        const client = owners.find(o => o.id === id);
+        if (!client) return;
+        
+        const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+        const confirmBtn = document.getElementById('confirmActionBtn');
+        const modalBody = document.getElementById('modalBody');
+        
+        modalBody.textContent = `¿Está seguro de que desea eliminar al cliente ${client.firstName} ${client.lastName}? Esta acción no se puede deshacer.`;
+        
+        confirmBtn.onclick = function() {
+            // Eliminar cliente
+            owners = owners.filter(o => o.id !== id);
+            
+            // Eliminar también sus mascotas
+            patients = patients.filter(p => p.ownerId !== id);
+            
+            renderClients();
+            showToast('Cliente eliminado correctamente', 'success');
+            modal.hide();
+        };
+        
+        modal.show();
+    }
+
+    // Funciones auxiliares
+    function showToast(message, type) {
+        const toastElement = document.getElementById('successToast');
+        const toastBody = toastElement.querySelector('.toast-body');
+        
+        toastBody.textContent = message;
+        
+        // Cambiar clase según tipo
+        const toastHeader = toastElement.querySelector('.toast-header');
+        toastHeader.className = 'toast-header text-white';
+        
+        if (type === 'success') {
+            toastHeader.classList.add('bg-success');
+        } else if (type === 'error') {
+            toastHeader.classList.add('bg-danger');
+        }
+        
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+    }
+    
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', function() {
+        renderClients();
+        
+        // Event listeners
+        document.getElementById('addClientBtn').addEventListener('click', openAddClientModal);
+        document.getElementById('saveClientBtn').addEventListener('click', saveClient);
+        document.getElementById('clientSearch').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                renderClients();
+            }
+        });
+        
+        // Búsqueda automática al escribir
+        let searchTimeout;
+        document.getElementById('clientSearch').addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(renderClients, 300);
+        });
+    });
+</script>
+{% endblock %}
