@@ -1,0 +1,196 @@
+:root {
+  --vet-primary: #4285f4;
+  --vet-secondary: #34a853;
+  --vet-danger: #ea4335;
+  --vet-light: #f8f9fa;
+  --vet-dark: #343a40;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+}
+
+.vet-navbar {
+  background-color: var(--vet-primary);
+}
+
+.vet-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  border-radius: 10px;
+  overflow: hidden;
+  border: none;
+}
+
+.vet-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.pet-img-container {
+  height: 180px;
+  overflow: hidden;
+  position: relative;
+}
+
+.pet-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.pet-img-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  color: white;
+  padding: 10px;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.pet-img-container:hover .pet-img-overlay {
+  transform: translateY(0);
+}
+
+.pet-type-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--vet-primary);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.vet-card:hover .pet-img {
+  transform: scale(1.05);
+}
+
+.btn-accept {
+  background-color: var(--vet-secondary);
+  color: white;
+}
+
+.btn-reject {
+  background-color: var(--vet-danger);
+  color: white;
+}
+
+.status-badge {
+  font-size: 0.8rem;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+.status-pending {
+  background-color: #ffc107;
+  color: var(--vet-dark);
+}
+
+.status-accepted {
+  background-color: var(--vet-secondary);
+  color: white;
+}
+
+.status-rejected {
+  background-color: var(--vet-danger);
+  color: white;
+}
+
+#statsCanvas {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.editing {
+  border: 2px solid var(--vet-primary);
+  box-shadow: 0 0 0 0.25rem rgba(66, 133, 244, 0.25);
+}
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+}
+
+.action-btn {
+  min-width: 100px;
+}
+
+.btn-edit {
+  background-color: #4285f4;
+  color: white;
+}
+
+/* Imágenes predeterminadas para animales */
+.default-dog-img {
+  background: linear-gradient(135deg, #6a93cb 0%, #a4bfef 100%);
+}
+
+.default-cat-img {
+  background: linear-gradient(135deg, #d4a5a5 0%, #f8d7da 100%);
+}
+
+.default-bird-img {
+  background: linear-gradient(135deg, #80cbc4 0%, #b2dfdb 100%);
+}
+
+.default-other-img {
+  background: linear-gradient(135deg, #a5d6a7 0%, #c8e6c9 100%);
+}
+
+.default-img-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.default-img-icon {
+  font-size: 60px;
+  margin-bottom: 10px;
+}
+
+/* Responsividad para móviles */
+@media (max-width: 768px) {
+  .pet-img-container {
+    height: 150px;
+  }
+
+  .pet-type-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--vet-primary);
+  color: var(--vet-primary);
+}

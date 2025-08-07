@@ -78,36 +78,32 @@ def register(request):
   
 def login_view(request):
 
-  if request.method == 'POST':
-    form = LoginForm(request.POST)
-    if form.is_valid():
-      username = form.cleaned_data['username']
-      password = form.cleaned_data['password']
-      
-      user = authenticate(username=username, password=password)
-      if user is not None:
-          login(request, user)
-          
-          
-          
-          # print(user.clientes.cedula)
-          
-          messages.success(request, '¡Bienvenido de vuelta!')
-          
-          if hasattr(user, 'doctor'):
-              return redirect('citas')
-              
-          else: 
-            print("entro aca")
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+        
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, '¡Bienvenido de vuelta!')
             return redirect('home')
-      else:
-          messages.error(request, 'Usuario o contraseña incorrectos.')
-  else: 
-    form = LoginForm()
-    return render(request, 'login/login.html', {
-        'form': form,
-        # 'debug': settings.DEBUG
-    })
+            
+            #   if hasattr(user, 'doctor'):
+            #       return redirect('citas')
+                
+            #   else: 
+            #     print("entro aca")
+            #     return redirect('home')
+        else:
+            messages.error(request, 'Usuario o contraseña incorrectos.')
+    else: 
+        form = LoginForm()
+        return render(request, 'login/login.html', {
+            'form': form,
+            # 'debug': settings.DEBUG
+        })
   # if request.method == 'POST':
   #   return redirect('citas')
   # else:

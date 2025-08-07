@@ -1,501 +1,456 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VetCare - Gestión de Clientes</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome para iconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --vet-primary: #4285f4;
-            --vet-secondary: #34a853;
-            --vet-danger: #ea4335;
-            --vet-light: #f8f9fa;
-            --vet-dark: #343a40;
-            --vet-purple: #9c27b0;
-            --vet-orange: #ff9800;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
-        }
-        
-        .vet-navbar {
-            background-color: var(--vet-primary);
-        }
-        
-        .vet-card {
-            transition: transform 0.3s, box-shadow 0.3s;
-            border-radius: 10px;
-            overflow: hidden;
-            border: none;
-        }
-        
-        .vet-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        
-        .section-title {
-            border-bottom: 2px solid var(--vet-primary);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .owner-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        }
-        
-        .action-btn {
-            min-width: 100px;
-        }
-    </style>
-</head>
-<body>
-    <!-- Barra de navegación -->
-    <nav class="navbar navbar-expand-lg vet-navbar navbar-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <i class="fas fa-paw me-2"></i>
-                VetCare
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html"><i class="fas fa-calendar-check me-1"></i> Citas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#"><i class="fas fa-users me-1"></i> Clientes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="pacientes.html"><i class="fas fa-paw me-1"></i> Pacientes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="reportes.html"><i class="fas fa-chart-line me-1"></i> Reportes</a>
-                    </li>
-                </ul>
+{% extends 'shared/base.html' %} {% block title %}Inicio{% endblock %} 
+{% load static %}
+
+{% block extra_css %}
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/gestionCitas.css' %}"/>
+
+
+{% endblock %}
+{% block content %}
+<!-- Barra de navegación -->
+<!-- <nav class="navbar navbar-expand-lg vet-navbar navbar-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <i class="fas fa-paw me-2"></i>
+            VetCare
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html"><i class="fas fa-calendar-check me-1"></i> Citas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#"><i class="fas fa-users me-1"></i> Clientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="pacientes.html"><i class="fas fa-paw me-1"></i> Pacientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="reportes.html"><i class="fas fa-chart-line me-1"></i> Reportes</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav> -->
+
+<div class="container mb-5">
+    <!-- Sección de Clientes -->
+    <div class="section-content active" id="clients-section">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="fw-bold section-title"><i class="fas fa-users text-primary me-2"></i> Gestión de Clientes</h2>
+                <p class="text-muted">Administre la información de los dueños de mascotas</p>
             </div>
         </div>
-    </nav>
-
-    <div class="container mb-5">
-        <!-- Sección de Clientes -->
-        <div class="section-content active" id="clients-section">
-            <div class="row mb-4">
-                <div class="col-12">
-                    <h2 class="fw-bold section-title"><i class="fas fa-users text-primary me-2"></i> Gestión de Clientes</h2>
-                    <p class="text-muted">Administre la información de los dueños de mascotas</p>
-                </div>
-            </div>
-            
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <div class="input-group">
-                        <input type="text" id="clientSearch" class="form-control" placeholder="Buscar cliente...">
-                        <button class="btn btn-outline-primary" type="button" id="searchClientBtn">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-md-4 ms-auto text-end">
-                    <button class="btn btn-primary" id="addClientBtn" data-bs-toggle="modal" data-bs-target="#clientModal">
-                        <i class="fas fa-plus me-1"></i> Nuevo Cliente
+        
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <input type="text" id="clientSearch" class="form-control" placeholder="Buscar cliente...">
+                    <button class="btn btn-outline-primary" type="button" id="searchClientBtn">
+                        <i class="fas fa-search"></i>
                     </button>
                 </div>
             </div>
-            
-            <div class="row" id="clientsList">
-                <!-- Clientes se cargarán dinámicamente -->
+            <div class="col-md-4 ms-auto text-end">
+                <button class="btn btn-primary" id="addClientBtn" data-bs-toggle="modal" data-bs-target="#clientModal">
+                    <i class="fas fa-plus me-1"></i> Nuevo Cliente
+                </button>
             </div>
         </div>
-    </div>
-
-    <!-- Modal para agregar/editar cliente -->
-    <div class="modal fade" id="clientModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalClientTitle">Agregar Nuevo Cliente</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="clientForm">
-                        <input type="hidden" id="clientId">
-                        <div class="mb-3">
-                            <label for="firstName" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="firstName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="lastName" class="form-label">Apellido</label>
-                            <input type="text" class="form-control" id="lastName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">Teléfono</label>
-                            <input type="tel" class="form-control" id="phone" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email">
-                        </div>
-                        <div class="mb-3">
-                            <label for="address" class="form-label">Dirección</label>
-                            <textarea class="form-control" id="address" rows="2"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="saveClientBtn">Guardar</button>
-                </div>
-            </div>
+        
+        <div class="row" id="clientsList">
+            <!-- Clientes se cargarán dinámicamente -->
         </div>
     </div>
+</div>
 
-    <!-- Modal de confirmación -->
-    <div class="modal fade" id="confirmationModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle">Confirmar acción</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" id="modalBody">
-                    ¿Está seguro de que desea realizar esta acción?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="confirmActionBtn">Confirmar</button>
-                </div>
+<!-- Modal para agregar/editar cliente -->
+<div class="modal fade" id="clientModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalClientTitle">Agregar Nuevo Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-        </div>
-    </div>
-
-    <!-- Toast notifications -->
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-success text-white">
-                <strong class="me-auto"><i class="fas fa-check-circle me-2"></i>Éxito</strong>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                Operación realizada con éxito.
-            </div>
-        </div>
-    </div>
-
-    <!-- Bootstrap JS Bundle con Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        // Datos de ejemplo para clientes (dueños)
-        let owners = [
-            {
-                id: 1,
-                firstName: "Juan",
-                lastName: "Pérez",
-                phone: "555-1234",
-                email: "juan.perez@example.com",
-                address: "Calle Principal 123",
-                pets: [1, 2]
-            },
-            {
-                id: 2,
-                firstName: "María",
-                lastName: "Gómez",
-                phone: "555-5678",
-                email: "maria.gomez@example.com",
-                address: "Avenida Central 456",
-                pets: [3]
-            },
-            {
-                id: 3,
-                firstName: "Carlos",
-                lastName: "Rodríguez",
-                phone: "555-9012",
-                email: "carlos.rodriguez@example.com",
-                address: "Boulevard Norte 789",
-                pets: [4, 5]
-            },
-            {
-                id: 4,
-                firstName: "Laura",
-                lastName: "Martínez",
-                phone: "555-3456",
-                email: "laura.martinez@example.com",
-                address: "Calle Sur 101",
-                pets: [6]
-            }
-        ];
-
-        // Datos de ejemplo para pacientes (mascotas)
-        let patients = [
-            {
-                id: 1,
-                name: "Max",
-                species: "Perro",
-                breed: "Golden Retriever",
-                birthDate: "2020-05-15",
-                ownerId: 1
-            },
-            {
-                id: 2,
-                name: "Luna",
-                species: "Gato",
-                breed: "Siamés",
-                birthDate: "2021-02-20",
-                ownerId: 1
-            },
-            {
-                id: 3,
-                name: "Pico",
-                species: "Ave",
-                breed: "Periquito Australiano",
-                birthDate: "2022-08-10",
-                ownerId: 2
-            },
-            {
-                id: 4,
-                name: "Rocky",
-                species: "Perro",
-                breed: "Bulldog Francés",
-                birthDate: "2019-11-05",
-                ownerId: 3
-            },
-            {
-                id: 5,
-                name: "Nala",
-                species: "Gato",
-                breed: "Persa",
-                birthDate: "2018-06-30",
-                ownerId: 3
-            },
-            {
-                id: 6,
-                name: "Thor",
-                species: "Perro",
-                breed: "Pastor Alemán",
-                birthDate: "2020-09-12",
-                ownerId: 4
-            }
-        ];
-
-        // Variables globales
-        let currentClientId = null;
-
-        // Renderizar clientes (dueños)
-        function renderClients() {
-            const container = document.getElementById('clientsList');
-            container.innerHTML = '';
-            
-            const searchTerm = document.getElementById('clientSearch').value.toLowerCase();
-            
-            const filteredOwners = owners.filter(owner => {
-                const fullName = `${owner.firstName} ${owner.lastName}`.toLowerCase();
-                return fullName.includes(searchTerm) || 
-                       owner.phone.includes(searchTerm) || 
-                       (owner.email && owner.email.toLowerCase().includes(searchTerm));
-            });
-            
-            if (filteredOwners.length === 0) {
-                container.innerHTML = `
-                    <div class="col-12">
-                        <div class="alert alert-info text-center">
-                            <i class="fas fa-info-circle me-2"></i> No se encontraron clientes
-                        </div>
+            <div class="modal-body">
+                <form id="clientForm">
+                    <input type="hidden" id="clientId">
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="firstName" required>
                     </div>
-                `;
-                return;
-            }
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="lastName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Teléfono</label>
+                        <input type="tel" class="form-control" id="phone" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Dirección</label>
+                        <textarea class="form-control" id="address" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="saveClientBtn">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="confirmationModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Confirmar acción</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                ¿Está seguro de que desea realizar esta acción?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirmActionBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast notifications -->
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-success text-white">
+            <strong class="me-auto"><i class="fas fa-check-circle me-2"></i>Éxito</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Operación realizada con éxito.
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<!-- Bootstrap JS Bundle con Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Datos de ejemplo para clientes (dueños)
+    let owners = [
+        {
+            id: 1,
+            firstName: "Juan",
+            lastName: "Pérez",
+            phone: "555-1234",
+            email: "juan.perez@example.com",
+            address: "Calle Principal 123",
+            pets: [1, 2]
+        },
+        {
+            id: 2,
+            firstName: "María",
+            lastName: "Gómez",
+            phone: "555-5678",
+            email: "maria.gomez@example.com",
+            address: "Avenida Central 456",
+            pets: [3]
+        },
+        {
+            id: 3,
+            firstName: "Carlos",
+            lastName: "Rodríguez",
+            phone: "555-9012",
+            email: "carlos.rodriguez@example.com",
+            address: "Boulevard Norte 789",
+            pets: [4, 5]
+        },
+        {
+            id: 4,
+            firstName: "Laura",
+            lastName: "Martínez",
+            phone: "555-3456",
+            email: "laura.martinez@example.com",
+            address: "Calle Sur 101",
+            pets: [6]
+        }
+    ];
+
+    // Datos de ejemplo para pacientes (mascotas)
+    let patients = [
+        {
+            id: 1,
+            name: "Max",
+            species: "Perro",
+            breed: "Golden Retriever",
+            birthDate: "2020-05-15",
+            ownerId: 1
+        },
+        {
+            id: 2,
+            name: "Luna",
+            species: "Gato",
+            breed: "Siamés",
+            birthDate: "2021-02-20",
+            ownerId: 1
+        },
+        {
+            id: 3,
+            name: "Pico",
+            species: "Ave",
+            breed: "Periquito Australiano",
+            birthDate: "2022-08-10",
+            ownerId: 2
+        },
+        {
+            id: 4,
+            name: "Rocky",
+            species: "Perro",
+            breed: "Bulldog Francés",
+            birthDate: "2019-11-05",
+            ownerId: 3
+        },
+        {
+            id: 5,
+            name: "Nala",
+            species: "Gato",
+            breed: "Persa",
+            birthDate: "2018-06-30",
+            ownerId: 3
+        },
+        {
+            id: 6,
+            name: "Thor",
+            species: "Perro",
+            breed: "Pastor Alemán",
+            birthDate: "2020-09-12",
+            ownerId: 4
+        }
+    ];
+
+    // Variables globales
+    let currentClientId = null;
+
+    // Renderizar clientes (dueños)
+    function renderClients() {
+        const container = document.getElementById('clientsList');
+        container.innerHTML = '';
+        
+        const searchTerm = document.getElementById('clientSearch').value.toLowerCase();
+        
+        const filteredOwners = owners.filter(owner => {
+            const fullName = `${owner.firstName} ${owner.lastName}`.toLowerCase();
+            return fullName.includes(searchTerm) || 
+                    owner.phone.includes(searchTerm) || 
+                    (owner.email && owner.email.toLowerCase().includes(searchTerm));
+        });
+        
+        if (filteredOwners.length === 0) {
+            container.innerHTML = `
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-info-circle me-2"></i> No se encontraron clientes
+                    </div>
+                </div>
+            `;
+            return;
+        }
+        
+        filteredOwners.forEach(owner => {
+            // Obtener mascotas de este dueño
+            const ownerPets = patients.filter(pet => owner.pets.includes(pet.id));
+            const petsList = ownerPets.map(pet => `<li>${pet.name} (${pet.species})</li>`).join('');
             
-            filteredOwners.forEach(owner => {
-                // Obtener mascotas de este dueño
-                const ownerPets = patients.filter(pet => owner.pets.includes(pet.id));
-                const petsList = ownerPets.map(pet => `<li>${pet.name} (${pet.species})</li>`).join('');
-                
-                const cardHTML = `
-                    <div class="col-md-6 mb-4">
-                        <div class="card owner-card vet-card">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <h5 class="card-title">${owner.firstName} ${owner.lastName}</h5>
-                                    <div class="badge bg-primary">${ownerPets.length} mascota${ownerPets.length !== 1 ? 's' : ''}</div>
-                                </div>
-                                <p class="card-text"><i class="fas fa-phone me-2"></i> ${owner.phone}</p>
-                                <p class="card-text"><i class="fas fa-envelope me-2"></i> ${owner.email || 'No registrado'}</p>
-                                <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i> ${owner.address || 'No registrada'}</p>
-                                
-                                <h6 class="mt-3 mb-2"><i class="fas fa-paw me-1"></i> Mascotas</h6>
-                                <ul class="list-group list-group-flush mb-3">
-                                    ${petsList || '<li>No tiene mascotas registradas</li>'}
-                                </ul>
-                                
-                                <div class="d-flex justify-content-end">
-                                    <button class="btn btn-sm btn-outline-primary me-2" onclick="editClient(${owner.id})">
-                                        <i class="fas fa-edit me-1"></i> Editar
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="confirmDeleteClient(${owner.id})">
-                                        <i class="fas fa-trash me-1"></i> Eliminar
-                                    </button>
-                                </div>
+            const cardHTML = `
+                <div class="col-md-6 mb-4">
+                    <div class="card owner-card vet-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="card-title">${owner.firstName} ${owner.lastName}</h5>
+                                <div class="badge bg-primary">${ownerPets.length} mascota${ownerPets.length !== 1 ? 's' : ''}</div>
+                            </div>
+                            <p class="card-text"><i class="fas fa-phone me-2"></i> ${owner.phone}</p>
+                            <p class="card-text"><i class="fas fa-envelope me-2"></i> ${owner.email || 'No registrado'}</p>
+                            <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i> ${owner.address || 'No registrada'}</p>
+                            
+                            <h6 class="mt-3 mb-2"><i class="fas fa-paw me-1"></i> Mascotas</h6>
+                            <ul class="list-group list-group-flush mb-3">
+                                ${petsList || '<li>No tiene mascotas registradas</li>'}
+                            </ul>
+                            
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-sm btn-outline-primary me-2" onclick="editClient(${owner.id})">
+                                    <i class="fas fa-edit me-1"></i> Editar
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="confirmDeleteClient(${owner.id})">
+                                    <i class="fas fa-trash me-1"></i> Eliminar
+                                </button>
                             </div>
                         </div>
                     </div>
-                `;
-                
-                container.insertAdjacentHTML('beforeend', cardHTML);
-            });
-        }
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', cardHTML);
+        });
+    }
 
-        // Abrir modal para agregar nuevo cliente
-        function openAddClientModal() {
-            document.getElementById('modalClientTitle').textContent = 'Agregar Nuevo Cliente';
-            document.getElementById('clientForm').reset();
-            document.getElementById('clientId').value = '';
-            currentClientId = null;
-            
-            const modal = new bootstrap.Modal(document.getElementById('clientModal'));
-            modal.show();
-        }
+    // Abrir modal para agregar nuevo cliente
+    function openAddClientModal() {
+        document.getElementById('modalClientTitle').textContent = 'Agregar Nuevo Cliente';
+        document.getElementById('clientForm').reset();
+        document.getElementById('clientId').value = '';
+        currentClientId = null;
+        
+        const modal = new bootstrap.Modal(document.getElementById('clientModal'));
+        modal.show();
+    }
 
-        // Editar cliente
-        function editClient(id) {
-            const client = owners.find(o => o.id === id);
-            if (!client) return;
-            
-            document.getElementById('modalClientTitle').textContent = 'Editar Cliente';
-            document.getElementById('clientId').value = client.id;
-            document.getElementById('firstName').value = client.firstName;
-            document.getElementById('lastName').value = client.lastName;
-            document.getElementById('phone').value = client.phone;
-            document.getElementById('email').value = client.email || '';
-            document.getElementById('address').value = client.address || '';
-            
-            currentClientId = id;
-            
-            const modal = new bootstrap.Modal(document.getElementById('clientModal'));
-            modal.show();
-        }
+    // Editar cliente
+    function editClient(id) {
+        const client = owners.find(o => o.id === id);
+        if (!client) return;
+        
+        document.getElementById('modalClientTitle').textContent = 'Editar Cliente';
+        document.getElementById('clientId').value = client.id;
+        document.getElementById('firstName').value = client.firstName;
+        document.getElementById('lastName').value = client.lastName;
+        document.getElementById('phone').value = client.phone;
+        document.getElementById('email').value = client.email || '';
+        document.getElementById('address').value = client.address || '';
+        
+        currentClientId = id;
+        
+        const modal = new bootstrap.Modal(document.getElementById('clientModal'));
+        modal.show();
+    }
 
-        // Guardar cliente
-        function saveClient() {
-            const id = document.getElementById('clientId').value;
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const address = document.getElementById('address').value;
-            
-            if (!firstName || !lastName || !phone) {
-                showToast('Por favor complete los campos obligatorios', 'error');
-                return;
-            }
-            
-            if (id) {
-                // Editar cliente existente
-                const index = owners.findIndex(o => o.id == id);
-                if (index !== -1) {
-                    owners[index] = {
-                        ...owners[index],
-                        firstName,
-                        lastName,
-                        phone,
-                        email: email || undefined,
-                        address: address || undefined
-                    };
-                    
-                    showToast('Cliente actualizado correctamente', 'success');
-                }
-            } else {
-                // Agregar nuevo cliente
-                const newId = owners.length > 0 ? Math.max(...owners.map(o => o.id)) + 1 : 1;
-                owners.push({
-                    id: newId,
+    // Guardar cliente
+    function saveClient() {
+        const id = document.getElementById('clientId').value;
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+        const address = document.getElementById('address').value;
+        
+        if (!firstName || !lastName || !phone) {
+            showToast('Por favor complete los campos obligatorios', 'error');
+            return;
+        }
+        
+        if (id) {
+            // Editar cliente existente
+            const index = owners.findIndex(o => o.id == id);
+            if (index !== -1) {
+                owners[index] = {
+                    ...owners[index],
                     firstName,
                     lastName,
                     phone,
                     email: email || undefined,
-                    address: address || undefined,
-                    pets: []
-                });
+                    address: address || undefined
+                };
                 
-                showToast('Cliente agregado correctamente', 'success');
+                showToast('Cliente actualizado correctamente', 'success');
             }
+        } else {
+            // Agregar nuevo cliente
+            const newId = owners.length > 0 ? Math.max(...owners.map(o => o.id)) + 1 : 1;
+            owners.push({
+                id: newId,
+                firstName,
+                lastName,
+                phone,
+                email: email || undefined,
+                address: address || undefined,
+                pets: []
+            });
             
-            renderClients();
-            
-            // Cerrar modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('clientModal'));
-            modal.hide();
-        }
-
-        // Confirmar eliminación de cliente
-        function confirmDeleteClient(id) {
-            const client = owners.find(o => o.id === id);
-            if (!client) return;
-            
-            const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
-            const confirmBtn = document.getElementById('confirmActionBtn');
-            const modalBody = document.getElementById('modalBody');
-            
-            modalBody.textContent = `¿Está seguro de que desea eliminar al cliente ${client.firstName} ${client.lastName}? Esta acción no se puede deshacer.`;
-            
-            confirmBtn.onclick = function() {
-                // Eliminar cliente
-                owners = owners.filter(o => o.id !== id);
-                
-                // Eliminar también sus mascotas
-                patients = patients.filter(p => p.ownerId !== id);
-                
-                renderClients();
-                showToast('Cliente eliminado correctamente', 'success');
-                modal.hide();
-            };
-            
-            modal.show();
-        }
-
-        // Funciones auxiliares
-        function showToast(message, type) {
-            const toastElement = document.getElementById('successToast');
-            const toastBody = toastElement.querySelector('.toast-body');
-            
-            toastBody.textContent = message;
-            
-            // Cambiar clase según tipo
-            const toastHeader = toastElement.querySelector('.toast-header');
-            toastHeader.className = 'toast-header text-white';
-            
-            if (type === 'success') {
-                toastHeader.classList.add('bg-success');
-            } else if (type === 'error') {
-                toastHeader.classList.add('bg-danger');
-            }
-            
-            const toast = new bootstrap.Toast(toastElement);
-            toast.show();
+            showToast('Cliente agregado correctamente', 'success');
         }
         
-        // Inicialización
-        document.addEventListener('DOMContentLoaded', function() {
-            renderClients();
+        renderClients();
+        
+        // Cerrar modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('clientModal'));
+        modal.hide();
+    }
+
+    // Confirmar eliminación de cliente
+    function confirmDeleteClient(id) {
+        const client = owners.find(o => o.id === id);
+        if (!client) return;
+        
+        const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+        const confirmBtn = document.getElementById('confirmActionBtn');
+        const modalBody = document.getElementById('modalBody');
+        
+        modalBody.textContent = `¿Está seguro de que desea eliminar al cliente ${client.firstName} ${client.lastName}? Esta acción no se puede deshacer.`;
+        
+        confirmBtn.onclick = function() {
+            // Eliminar cliente
+            owners = owners.filter(o => o.id !== id);
             
-            // Event listeners
-            document.getElementById('addClientBtn').addEventListener('click', openAddClientModal);
-            document.getElementById('saveClientBtn').addEventListener('click', saveClient);
-            document.getElementById('searchClientBtn').addEventListener('click', renderClients);
-            document.getElementById('clientSearch').addEventListener('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    renderClients();
-                }
-            });
+            // Eliminar también sus mascotas
+            patients = patients.filter(p => p.ownerId !== id);
+            
+            renderClients();
+            showToast('Cliente eliminado correctamente', 'success');
+            modal.hide();
+        };
+        
+        modal.show();
+    }
+
+    // Funciones auxiliares
+    function showToast(message, type) {
+        const toastElement = document.getElementById('successToast');
+        const toastBody = toastElement.querySelector('.toast-body');
+        
+        toastBody.textContent = message;
+        
+        // Cambiar clase según tipo
+        const toastHeader = toastElement.querySelector('.toast-header');
+        toastHeader.className = 'toast-header text-white';
+        
+        if (type === 'success') {
+            toastHeader.classList.add('bg-success');
+        } else if (type === 'error') {
+            toastHeader.classList.add('bg-danger');
+        }
+        
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+    }
+    
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', function() {
+        renderClients();
+        
+        // Event listeners
+        document.getElementById('addClientBtn').addEventListener('click', openAddClientModal);
+        document.getElementById('saveClientBtn').addEventListener('click', saveClient);
+        document.getElementById('searchClientBtn').addEventListener('click', renderClients);
+        document.getElementById('clientSearch').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                renderClients();
+            }
         });
-    </script>
-</body>
-</html>
+    });
+</script>
+{% endblock %}
