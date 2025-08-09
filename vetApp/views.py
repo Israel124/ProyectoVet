@@ -1,13 +1,13 @@
 from datetime import datetime, timedelta, time
 from django.shortcuts import redirect, render
 from vetApp.forms import LoginForm
-from vetApp.forms import LoginForm, ClientesForm, PacienteForm, ReporteForm
+from vetApp.forms import LoginForm, ClientesForm, PacienteForm, ReporteForm, CitaForm
 from vetApp.models import Paciente, Clientes
 from django.views.generic import TemplateView
 from django.views import View
 from django import forms
 from .forms import ClientesForm, RegistroForm
-from .models import Clientes
+from .models import Clientes,Cita
 from django.contrib.auth.models import User
 
 from django.contrib.auth.forms import UserCreationForm #crea usuarios
@@ -15,6 +15,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
+from django.shortcuts import get_object_or_404
 def home(request):
   
   contexto = {}
@@ -160,3 +161,57 @@ def Clientes_view(request):
     else:
         form = ClientesForm()
     return render(request, 'GClientes/GestionClientes.html', {'form': form})
+
+
+@login_required
+def citas_cliente(request):
+    # Obtener el cliente relacionado al usuario
+    try:
+        cliente = request.user.clientes
+    except Clientes.DoesNotExist:
+        messages.error(request, "No tienes perfil de cliente.")
+        return redirect('home')
+
+    # Mostrar solo las citas de los pacientes de este cliente
+    pacientes = Paciente.objects.filter(cliente=cliente)
+    citas = Cita.objects.filter(paciente__in=pacientes).order_by('-fecha')
+
+    # Crear o editar cita
+    if request.method == 'POST':
+        if 'cita_id' in request.POST:
+            cita = get_object_or_404(Cita, id=request.POST['cita_id'], paciente__cliente=cliente)
+            form = CitaForm(request.POST, instance=cita)
+        else:
+            form = CitaForm(request.POST)
+        if form.is_valid():
+            nueva_cita = form.save(commit=False)
+            # Solo permitir pacientes del cliente actual
+            if nueva_cita.paciente.cliente != cliente:
+                messages.error(request, "No puedes agendar citas para pacientes que no son tuyos.")
+            else:
+                nueva_cita.save()
+                messages.success(request, "Cita guardada correctamente.")
+                return redirect('citas_cliente')
+    else:
+        form = CitaForm()
+        form.fields['paciente'].queryset = Paciente.objects.filter(cliente=cliente)
+
+    return render(request, 'citas/citas_cliente.html', {
+        'form': form,
+        'citas': citas,
+        'pacientes': pacientes,
+    })
+
+@login_required
+def eliminar_cita(request, cita_id):
+    try:
+        cliente = request.user.clientes
+    except Clientes.DoesNotExist:
+        messages.error(request, "No tienes perfil de cliente.")
+        return redirect('home')
+    cita = get_object_or_404(Cita, id=cita_id, paciente__cliente=cliente)
+    if request.method == 'POST':
+        cita.delete()
+        messages.success(request, "Cita eliminada correctamente.")
+        return redirect('citas_cliente')
+    return render(request, 'citas/confirmar_eliminar.html', {'cita': cita})

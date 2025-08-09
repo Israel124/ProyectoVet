@@ -15,5 +15,7 @@ urlpatterns = [
   path('cliente/', views.Clientes_view, name='cliente'),
   path('pacientes/', views.Paciente_view, name='pacientes'),
   path('reportes/', views.Reportes_view, name='reportes'),
-  path('newRegistro', VRegistro.as_view(), name='Authenticacion')
+  path('newRegistro', VRegistro.as_view(), name='Authenticacion'),
+  path('miscitas/', views.citas_cliente, name='citas_cliente'),
+  path('eliminar-cita/<int:cita_id>/', views.eliminar_cita, name='eliminar_cita'),
 ]

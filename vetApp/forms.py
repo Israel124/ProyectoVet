@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-
+from .models import Cita, Paciente, Clientes, Doctor
 
 class LoginForm(forms.Form):
     username = forms.CharField(
@@ -65,3 +65,12 @@ class RegistroForm(forms.Form):
         if password and password2 and password != password2:
             self.add_error('password2', "Las contraseñas no coinciden.")
         return cleaned_data
+
+
+class CitaForm(forms.ModelForm):
+    class Meta:
+        model = Cita
+        fields = ['paciente', 'doctor', 'fecha', 'motivo', 'notas']
+        widgets = {
+            'fecha': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }

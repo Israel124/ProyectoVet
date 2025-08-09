@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'shared/base.html' %}
 
 {% block title %}VetCare - Gestión de Clientes{% endblock %}
 
@@ -381,6 +381,7 @@
         
         const filteredOwners = owners.filter(owner => {
             const fullName = `${owner.firstName} ${owner.lastName}`.toLowerCase();
+
             return fullName.includes(searchTerm) || 
                    owner.phone.includes(searchTerm) || 
                    (owner.email && owner.email.toLowerCase().includes(searchTerm));
@@ -566,7 +567,7 @@
         const modalBody = document.getElementById('modalBody');
         
         modalBody.textContent = `¿Está seguro de que desea eliminar al cliente ${client.firstName} ${client.lastName}? Esta acción no se puede deshacer.`;
-        
+
         confirmBtn.onclick = function() {
             // Eliminar cliente
             owners = owners.filter(o => o.id !== id);

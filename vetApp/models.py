@@ -22,7 +22,7 @@ class Paciente(models.Model):
     cliente = models.ForeignKey(Clientes, on_delete=models.CASCADE,verbose_name="Dueño de la mascota" )
 
     def __str__(self):
-        return f"Nombre de la mascota: {self.nombre} - Especie: {self.especie} - Raza: {self.raza} - Dueño: {self.cliente.nombre}"
+        return self.nombre
     
     
 class Doctor(models.Model):
