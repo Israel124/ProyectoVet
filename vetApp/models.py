@@ -45,6 +45,13 @@ class Cita(models.Model):
     notas = models.TextField(blank=True, null=True, verbose_name="Notas adicionales")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Creado el")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Actualizado el")
+    ESTADO_CHOICES = [
+        ('pendiente', 'Pendiente'),
+        ('confirmada', 'Confirmada'),
+        ('cancelada', 'Cancelada'),
+    ]
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='pendiente', verbose_name="Estado de la cita")
+
 
     def __str__(self):
         return f"Cita de {self.paciente.nombre} con {self.doctor.nombre if self.doctor else 'Sin asignar'} el {self.fecha.strftime('%d/%m/%Y %H:%M')}"

@@ -22,12 +22,37 @@ def home(request):
   
   return render(request, 'Home/home.html', contexto)
 
+
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+
 @login_required
 def citas(request):
-  
-    contexto = {}
+    citas = Cita.objects.select_related('paciente', 'paciente__cliente', 'doctor').all()
+    
+    appointments_data = []
+    for cita in citas:
+        appointments_data.append({
+            'id': cita.id,
+            'petName': cita.paciente.nombre,
+            'animalType': cita.paciente.especie.lower(),
+            'breed': cita.paciente.raza,
+            'age': (datetime.now().date() - cita.paciente.fecha_nacimiento).days // 365 if cita.paciente.fecha_nacimiento else 0,
+            'date': cita.fecha.strftime('%Y-%m-%d'),
+            'time': cita.fecha.strftime('%H:%M'),
+            'description': cita.motivo,
+            'status': cita.estado,
+            'ownerName': cita.paciente.cliente.nombre,
+            'phone': cita.paciente.cliente.telefono,
+            'email': cita.paciente.cliente.email,
+        })
+
+    contexto = {
+        'appointments_json': json.dumps(appointments_data, cls=DjangoJSONEncoder)
+    }
     
     return render(request, 'Home/GestionCitas.html', contexto)
+
 
 
 class VRegistro(View):
